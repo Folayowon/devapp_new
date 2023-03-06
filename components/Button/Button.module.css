@@ -1,0 +1,36 @@
+.button {
+  margin-block: 2rem;
+  background-color: transparent;
+  /* border: 1px solid white; */
+  /* width: 100%; */
+  border-radius: 10px !important;
+  border: none;
+  background-color: orangered;
+  padding: 1rem 2rem;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 500ms ease-in-out;
+}
+
+.button:hover {
+  background-color: white;
+  color: orangered;
+}
+
+@media only screen and(max-widthL:800px) {
+  .button {
+    margin-block: 2rem;
+    background-color: transparent;
+    /* border: 1px solid white; */
+    width: 100%;
+    border-radius: 10px !important;
+    border: none;
+    background-color: orangered;
+    padding: 1rem 2rem;
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 500ms ease-in-out;
+  }
+}
