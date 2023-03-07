@@ -11,7 +11,7 @@ const electionKeys = () => {
 
 
     // const startElectionButton = "Start Election";
-  const {startElection, timer, endElection} = useContext(VotingContext)
+  const {startElection, timer, endElection} = useContext(VotingContext);
     // function handleClick() {
     //   console.log("The election has commenced.");
 
@@ -19,14 +19,14 @@ const electionKeys = () => {
       <div>
         {/* <h1>{timer}</h1> */}
         
-        <h1>About page content goes here</h1>
-        <div className={Style.Button}>
+        {/* <h1>About page content goes here</h1> */}
+        {/* <div className={Style.Button}>
             <Button
               btnName="End Election"
               handleClick={() => endElection()}
               />
             
-          </div>
+          </div> */}
         <div className={Style.Button}>
             <Button
               btnName="Start Election"

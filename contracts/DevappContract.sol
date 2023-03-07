@@ -14,7 +14,7 @@ contract Devapp {
     address[] public candidateAddresses; // public array to store the addresses of all candidates
     address[] public voterAddresses; // public arrayn to store the addresses of all voters
     uint256 public totalVotes;
-    uint256 public constant ELECTION_DURATION = 1 minutes;
+    uint256 public constant ELECTION_DURATION = 24 hours;
     uint256 public startTime;
     bool public ended;
     bool public started;
@@ -241,7 +241,7 @@ contract Devapp {
         require (state != ElectionState.NotStarted, "Election has not yet started.");
         require (state == ElectionState.Started, "Election has ended.");
         uint256 timeSpent = block.timestamp - startTime;
-        return ELECTION_DURATION - timeSpent;
+        return 120 /*ELECTION_DURATION - timeSpent*/;
     }
 
     function electionEnds() public {
