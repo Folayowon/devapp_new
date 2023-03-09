@@ -42,7 +42,7 @@ The logo for the Decentralized Voting Application (Devapp) combines the symbol o
 
 # Project Website Link:
 
-https://devapp-folayowon.vercel.app
+https://main--radiant-bubblegum-fa88d4.netlify.app/
 
 # Project Author:
 
