@@ -60,12 +60,7 @@ const NavBar = () => {
               </p>
               {/* {authorizerAccount === currentAccount.toLowerCase() ?  */}
 
-              <p>
-                <Link href={{ pathname: "pollingBooth" }}>
-                  Polling Booth
-                </Link>
-              </p>
-
+              
               <p>
               <Link className={Style.linkWeight} href={{ pathname: "candidateFactory" }}>
                 Candidates
@@ -89,6 +84,13 @@ const NavBar = () => {
               <p>
                 <Link href={{ pathname: "ListOfVoters" }}>Election Summary</Link>
               </p>
+
+              <p>
+                <Link href={{ pathname: "pollingBooth" }}>
+                  Polling Booth
+                </Link>
+              </p>
+
             </div>
           )}
 
