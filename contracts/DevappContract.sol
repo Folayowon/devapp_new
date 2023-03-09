@@ -14,14 +14,14 @@ contract Devapp {
     address[] public candidateAddresses; // public array to store the addresses of all candidates
     address[] public voterAddresses; // public arrayn to store the addresses of all voters
     uint256 public totalVotes;
-    uint256 public constant ELECTION_DURATION = 24 hours;
+    uint256 public constant ELECTION_DURATION = 30 minutes;
     uint256 public startTime;
     bool public ended;
     bool public started;
     enum ElectionState { NotStarted, Started, Ended }
     ElectionState public state = ElectionState.NotStarted;
 
-
+    event Action(uint256 timestamp);
     // Structs
     struct Candidate {
         uint256 id; // unique identifier for candidate
@@ -237,12 +237,15 @@ contract Devapp {
         state = ElectionState.Started;
     }
      
-    function getTimeLeft() public view returns (uint256) {
-        require (state != ElectionState.NotStarted, "Election has not yet started.");
-        require (state == ElectionState.Started, "Election has ended.");
-        uint256 timeSpent = block.timestamp - startTime;
-        return 120 /*ELECTION_DURATION - timeSpent*/;
-    }
+    // function getTimeLeft() public returns (uint256) {
+    //     require (state != ElectionState.NotStarted, "Election has not yet started.");
+    //     require (state == ElectionState.Started, "Election has ended.");
+    //     uint256 timeSpent = block.timestamp - startTime;
+    //     uint256 timeLeft = ELECTION_DURATION - timeSpent;
+    //     emit Action(timeLeft);
+    //     return timeLeft;
+        
+    // }
 
     function electionEnds() public {
         require (state == ElectionState.Started);

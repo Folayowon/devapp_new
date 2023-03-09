@@ -1,15 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
-
 import VoterCard from "../components/voterCard/voterCard";
 import Style from "../styles/voterList.module.css";
-
 import { VotingContext } from "../context/Voter";
-const voterList = () => {
+
+const VoterList = () => {
   const { getAllVoterData, voterArray } = useContext(VotingContext);
 
   useEffect(() => {
     getAllVoterData();
-    console.log(voterArray);
   }, []);
 
   return (
@@ -19,4 +17,4 @@ const voterList = () => {
   );
 };
 
-export default voterList;
+export default VoterList;

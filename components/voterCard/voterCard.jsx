@@ -5,11 +5,11 @@ import Style from "../card/card.module.css";
 import image from "../../candidate.png";
 import voterCardStyle from "./voterCard.module.css";
 
-const voterCard = ({ voterArray }) => {
+const VoterCard = ({ voterArray }) => {
   return (
     <div className={Style.card}>
-      {voterArray.map((el, i) => (
-        <div className={Style.card_box}>
+      {voterArray.map((el) => (
+        <div key={el.id} className={Style.card_box}>
           <div className={Style.image}>
             <img src={el[4]} alt="Profile photo" />
           </div>
@@ -20,12 +20,12 @@ const voterCard = ({ voterArray }) => {
             </h2>
             <p>Address: {el[3].slice(0, 30)}..</p>
             <p>
-              Over the years, I have acquired relevant skills and experience.
+              {el[1]} is authorized to vote.
             </p>
             <p className={voterCardStyle.vote_Status}>
               {el[6] == true
                 ? "You can't vote twice."
-                : "You haven't voted yet."}
+                : "Not yet voted."}
             </p>
           </div>
         </div>
@@ -34,4 +34,4 @@ const voterCard = ({ voterArray }) => {
   );
 };
 
-export default voterCard;
+export default VoterCard;

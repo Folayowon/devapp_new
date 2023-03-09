@@ -1,5 +1,5 @@
 .card {
-  width: 100%;
+  width: 35%;
 
   display: grid;
   /* grid-template-columns: repeat(3, 1fr); */
@@ -7,7 +7,7 @@
 }
 
 .card_box {
-  background-color: #231e39;
+  background-color: #0a0b23;
   box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.35);
   color: #b3b8cd;
   text-align: center;
@@ -16,20 +16,20 @@
 }
 
 .image img {
-  width: 100%;
+  width: 50%;
 }
 
 .card_info {
-  line-height: 1;
+  line-height: 0.5;
   padding: 0 1.5rem;
 }
 
 .card_vote {
-  color: #9a02ac;
+  color: #4e1a02;
 }
 
 .total {
-  background-color: #9a02ac;
+  background-color: #1e1d1c;
   padding: 0.5rem;
   border-radius: 0.2rem;
   font-weight: 900;
@@ -38,7 +38,7 @@
   text-transform: uppercase;
 }
 
-.card_vote p {
+.card_vote {
   font-size: 1.5rem;
 }
 
@@ -48,7 +48,7 @@
 }
 
 .card_button button {
-  background-color: #9a02ac;
+  background-color: #3c1003;
   box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.35);
   border: none;
   outline: none;
@@ -66,6 +66,6 @@
   }
 
   .image {
-    width: 400;
+    width: 200;
   }
 }
