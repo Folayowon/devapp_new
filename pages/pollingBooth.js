@@ -10,17 +10,17 @@ import Card from "../components/card/card";
 import image from "../candidate.png";
 import background from "../blockchain.svg";
 
-const index = () => {
+const pollingBooth = () => {
   const {
-    // getNewCandidate,
-    // candidateArray,
-    // giveVote,
-    // connectWallet,
+    getNewCandidate,
+    candidateArray,
+    giveVote,
+    connectWallet,
     checkIfWalletIsConnected,
-    // candidateLength,
-    // getAllVoterData,
+    candidateLength,
+    getAllVoterData,
     currentAccount,
-    //voterLength,
+    voterLength,
   } = useContext(VotingContext);
 
   useEffect(() => {
@@ -56,36 +56,36 @@ const index = () => {
         <div className={Style.heroRight}></div>
       </div> */}
       {
-        <div className={Style.container}>
-          <span className={Style.img}>
-            <Image src={background} />
-          </span>
-          <div className={Style.homeContainer}>
-            <div> 
-            <p className={Style.container_title}>Be a part of Decision!</p>
-            <div className={Style.home_vote}>
-              <span>Vote </span>
-              <span className={Style.voteColor}>Today</span>
-              <span className={Style.border}></span>
-            </div>
-            <div className={Style.voting}>
-              An online voting that will replace the centralized voting system
-            </div>
-            <div className={Style.accredited_voter}>
-              <AiFillCaretRight className={Style.icon} />
-              <div className={Style.accredited}>Get accredited to vote</div>
-            </div>
-            <div className={Style.btnContainer}>
-              {/* <button >Register</button> */}
-              {!currentAccount && (
-                <button className={Style.btn} onClick={() => connectWallet()}>
-                  Connect Wallet
-                </button>
-              )}
-            </div>
-            </div>
-          </div>
-        </div>
+        // <div className={Style.container}>
+        //   <span className={Style.img}>
+        //     <Image src={background} />
+        //   </span>
+        //   <div className={Style.homeContainer}>
+        //     <div> 
+        //     <p className={Style.container_title}>Be a part of Decision!</p>
+        //     <div className={Style.home_vote}>
+        //       <span>Vote </span>
+        //       <span className={Style.voteColor}>Today</span>
+        //       <span className={Style.border}></span>
+        //     </div>
+        //     <div className={Style.voting}>
+        //       An online voting that will replace the centralized voting system
+        //     </div>
+        //     <div className={Style.accredited_voter}>
+        //       <AiFillCaretRight className={Style.icon} />
+        //       <div className={Style.accredited}>Get accredited to vote</div>
+        //     </div>
+        //     <div className={Style.btnContainer}>
+        //       {/* <button >Register</button> */}
+        //       {!currentAccount && (
+        //         <button className={Style.btn} onClick={() => connectWallet()}>
+        //           Connect Wallet
+        //         </button>
+        //       )}
+        //     </div>
+        //     </div>
+        //   </div>
+        // </div>
       }
       {/* {currentAccount && (
         <div className={Style.winner}>
@@ -109,9 +109,9 @@ const index = () => {
         </div>
       )} */}
 
-      {/* <Card candidateArray={candidateArray} giveVote={giveVote} /> */}
+      <Card candidateArray={candidateArray} giveVote={giveVote} />
     </div>
   );
 };
 
-export default index;
+export default pollingBooth;

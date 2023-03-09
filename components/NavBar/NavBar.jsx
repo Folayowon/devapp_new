@@ -59,6 +59,13 @@ const NavBar = () => {
                 <Link href={{ pathname: "/" }}>Home</Link>
               </p>
               {/* {authorizerAccount === currentAccount.toLowerCase() ?  */}
+
+              <p>
+                <Link href={{ pathname: "pollingBooth" }}>
+                  Polling Booth
+                </Link>
+              </p>
+
               <p>
               <Link className={Style.linkWeight} href={{ pathname: "candidateFactory" }}>
                 Candidates
