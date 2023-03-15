@@ -50,8 +50,8 @@ export const VotingProvider = ({ children }) => {
 // Error message states
   const [error, setError] = useState("");
   const higestVote = [];
-  const pushVoter = [];
-  const [voterArray, setVoterArray] = useState(pushVoter);
+  const voterListArray = [];
+  const [voterArray, setVoterArray] = useState(voterListArray);
   const [voterLength, setVoterLength] = useState("");
   const [voterAddress, setVoterAddress] = useState([]);    
   const [timerValue, setTimerValue] = useState()
@@ -75,7 +75,7 @@ export const VotingProvider = ({ children }) => {
     if (accounts.length > 0) {
       setCurrentAccount(accounts[0]);
       getAllVoterData();
-      getNewCandidate();
+      
     } else {
       setError("Please, connect your wallet.");
 
@@ -102,7 +102,7 @@ export const VotingProvider = ({ children }) => {
     setCurrentAccount(accounts[0]);
     getAllVoterData();
     //console.log(getAllVoterData)
-    getNewCandidate();
+    // getNewCandidate();
   };
  
 // Fetches the authorizer address from the contract
@@ -150,40 +150,80 @@ export const VotingProvider = ({ children }) => {
   
   
   //Function to Create Voter
+  // const createVoter = async (formInput, fileUrl, router) => {
+  //   const { name, address, position } = formInput;
+  //   console.log(formInput)
+
+  //   if (!name || !address || !position)
+  //     return console.log("Please, check your input. Something is missing!");  // Validate input data
+
+  //   const web3Modal = new Web3Modal(); // Create Web3Modal instance
+  //   const connection = await web3Modal.connect(); // Connect to Web3Modal
+  //   const provider = new ethers.providers.Web3Provider(connection); // Create Web3Provider instance
+  //   const signer = provider.getSigner(); // Get signer
+  //   const contract = fetchContract(signer); // Fetch contract instance
+
+  //   // const data = JSON.stringify(fileUrl);// Serialize voter data
+  //   // console.log(data)
+  //   // const added = await client.add(fileUrl); // Add voter data to IPFS
+  //   // console.log(added)
+
+  //   // const url = `${subdomain}/ipfs/${added.path}`; // Generate URL to access voter data //`${subdomain}/ipfs/${added.path}` `https://ipfs.infura.io/ipfs/${added.path}`;
+  //   // console.log(url)
+
+
+
+  //   const data = JSON.stringify({
+  //     name,
+  //     address,
+  //     image: fileUrl,
+  //     position,
+  //   });
+  //   const added = await client.add(data);
+  //   console.log ("added ...", added)
+  //   const ipfs = `${subdomain}/ipfs/${added.path}`;
+  //   const voter = await contract.createVoters(
+  //     address,
+  //     name,
+  //     fileUrl,
+  //     //position,
+  //     // url,
+  //     ipfs ); // Create voter using contract method
+  //   // voter.wait();  // Wait for voter creation
+  //   console.log(voter)
+  //   router.push("/ListOfVoters"); // Navigate to voter list page
+  // };
+
   const createVoter = async (formInput, fileUrl, router) => {
     const { name, address, position } = formInput;
-    console.log(formInput)
 
-    if (!name || !address || !position)
-      return console.log("Please, check your input. Something is missing!");  // Validate input data
+    if (!name || !address || !position) return console.log("Input Data is missing");
 
-    const web3Modal = new Web3Modal(); // Create Web3Modal instance
-    const connection = await web3Modal.connect(); // Connect to Web3Modal
-    const provider = new ethers.providers.Web3Provider(connection); // Create Web3Provider instance
-    const signer = provider.getSigner(); // Get signer
-    const contract = fetchContract(signer); // Fetch contract instance
+    const web3Modal = new Web3Modal();
+    const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner();
+    const contract = fetchContract(signer);
 
-    const data = JSON.stringify({ 
-      name, 
-      address, 
+    const data = JSON.stringify({
+      name,
+      address,
       image: fileUrl,
-      position
-    });// Serialize voter data
-    console.log(data)
-    const added = await client.add(data); // Add voter data to IPFS
-    console.log(added)
+      position,
+    });
+    const added = await client.add(data);
+    console.log ("added ...", added)
+    const ipfs = `${subdomain}/ipfs/${added.path}`; // `${subdomain}/ipfs/${added.path}``https://ipfs.infura.io/ipfs/${added.path}`;
 
-    const url = `${subdomain}/ipfs/${added.path}`; // Generate URL to access voter data //`${subdomain}/ipfs/${added.path}` `https://ipfs.infura.io/ipfs/${added.path}`;
-    console.log(url)
-    const voter = await contract.createVoters(
+    const candidate = await contract.createVoters(
       address,
       name,
       fileUrl,
-      //position,
-      url); // Create voter using contract method
-    voter.wait();  // Wait for voter creation
-    console.log(voter)
-    router.push("/ListOfVoters"); // Navigate to voter list page
+      ipfs
+    );
+    candidate.wait();
+
+    router.push("/pollingBooth");
   };
 
   // =============================================
@@ -194,19 +234,20 @@ export const VotingProvider = ({ children }) => {
     const provider = new ethers.providers.Web3Provider(connection);
     const signer = provider.getSigner();
     const contract = fetchContract(signer);
-    return await contract.authorizer();
+     await contract.authorizer();
     
     //VOTER LIST
     const voterListData = await contract.get_voter_list();
       console.log(voterListData)
-      setVoterAddress(voterListData);
-      console.log(setVoterAddress(VoterListData))
+    const newVoterAddress =  setVoterAddress(voterListData);
+      console.log(newVoterAddress)
       
       const voterDetails = await Promise.all(voterListData.map(async (el) => {
         const singleVoterData = await contract.getVoterDetails(el);
+        voterListArray.push(singleVoterData)
         return singleVoterData;
     }));
-    setVoters(voterDetails);
+    // setVoters(voterDetails);
 
     //VOTER LENGTH
     const voterList = await contract.getVotersLength();
@@ -305,10 +346,10 @@ const endElection = async () => {
       const signer = provider.getSigner();
       const contract = fetchContract(signer);
 
-      const voteredList = await contract.vote(voterAddress, voterId);
+      const voteredList = await contract.voteBooth(voterAddress, voterId);
       console.log(voteredList);
     } catch (error) {
-      setError("Ops! You can't vote twice. Reload Browser");
+      console.log(error.message);
     }
   };
   // =============================================
@@ -357,9 +398,7 @@ const endElection = async () => {
     //---------ALL CANDIDATE
     const allCandidate = await contract.getCandidateAddress();
     console.log(contract.getCandidateAddress);
-    
-
-
+ 
     //--------CANDIDATE DATA
     allCandidate.map(async (el) => {
       const singleCandidateData = await contract.getCandidateData(el);
@@ -374,7 +413,7 @@ const endElection = async () => {
     console.log(allCandidateLength)
   };
 
-  console.log(error);
+  console.log(error.message);
 
   return (
     <VotingContext.Provider

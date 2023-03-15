@@ -44,10 +44,10 @@ const allowedVoters = () => {
     maxSize: 5000000,
   });
 
-  useEffect(() => {
-    getNewCandidate();
+  // useEffect(() => {
+  //   // getNewCandidate();
     console.log(voterArray);
-  }, []);
+  // }, []);
 
   return (
     <div className={Style.voterCreate}>
