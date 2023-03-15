@@ -15,10 +15,10 @@ const index = () => {
     // getNewCandidate,
     // candidateArray,
     // giveVote,
-    // connectWallet,
+    connectWallet,
     checkIfWalletIsConnected,
     // candidateLength,
-    // getAllVoterData,
+    getAllVoterData,
     currentAccount,
     //voterLength,
   } = useContext(VotingContext);

@@ -12,7 +12,7 @@ contract Devapp {
     Counters.Counter private _candidateId; // counter to keep track of the number of candidates
     address public authorizer; // public variable to store the contract authorizer's address
     address[] public candidateAddresses; // public array to store the addresses of all candidates
-    address[] public voterAddresses; // public arrayn to store the addresses of all voters
+    address[] public voterAddresses; // public array to store the addresses of all voters
     uint256 public totalVotes;
     uint256 public constant ELECTION_DURATION = 30 minutes;
     uint256 public startTime;
@@ -88,7 +88,6 @@ contract Devapp {
         
     }
 
-    // Candidate Functions
     function createCandidate(
         address _addr,
         string memory _name,
@@ -96,6 +95,7 @@ contract Devapp {
         string memory _image,
         string memory _ipfs
     ) public onlyAuthorizer{
+        require(_addr != address(0), "Candidate address cannot be zero");
         _candidateId.increment(); // increment the candidate counter
         uint256 id_number = _candidateId.current(); // get the current value of the candidate counter
 
@@ -122,10 +122,12 @@ contract Devapp {
         );
         
     }
-
     function getCandidateAddress() public view returns(address[] memory) {
-        return candidateAddresses;
+    if(candidateAddresses.length == 0) {
+        return new address[](0);
     }
+    return candidateAddresses;
+}
 
     function getCandidateAddressesLength() public view returns (uint256) {
         return candidateAddresses.length;
@@ -228,7 +230,10 @@ contract Devapp {
         return voterAddresses.length;
     }
     function get_voter_list() public view returns (address[] memory){
-        return voterAddresses;
+        if(voterAddresses.length == 0) {
+        return new address[](0);
+    }
+    return voterAddresses;
     }
 
     function commenceElection(bool) public onlyAuthorizer{
@@ -257,4 +262,4 @@ contract Devapp {
        
     }
 
-        
+            

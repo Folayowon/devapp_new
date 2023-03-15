@@ -12,7 +12,7 @@ import Button from "../components/Button/Button";
 import Input from "../components/Input/Input";
 import voter from "../voter.jpg";
 
-const candidateRegisration = () => {
+const candidateRegistration = () => {
   const [fileUrl, setFileUrl] = useState(null);
   const {
     uploadToIPFSCandidate,
@@ -175,4 +175,4 @@ const candidateRegisration = () => {
   );
 };
 
-export default candidateRegisration;
+export default candidateRegistration;

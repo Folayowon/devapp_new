@@ -12,6 +12,16 @@ import Input from "../components/Input/Input";
 
 const allowedVoters = () => {
   const [fileUrl, setFileUrl] = useState(null);
+
+  const { 
+    uploadToIPFS, 
+    createVoter, 
+    getAllVoterData, 
+    voterArray 
+  } = useContext(VotingContext);
+
+  console.log(voterArray);
+
   const [formInput, setFormInput] = useState({
     name: "",
     address: "",
@@ -20,11 +30,7 @@ const allowedVoters = () => {
 
   const router = useRouter();
 
-  const { uploadToIPFS, createVoter, getNewCandidate, voterArray } =
-    useContext(VotingContext);
-
-  console.log(voterArray);
-
+  
   //-------------VOTERS
   const onDrop = useCallback(async (acceptedFile) => {
     const url = await uploadToIPFS(acceptedFile[0]);

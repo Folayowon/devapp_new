@@ -24,8 +24,8 @@ const pollingBooth = () => {
   } = useContext(VotingContext);
 
   useEffect(() => {
-    // getNewCandidate();
-    // console.log(candidateArray);/
+    getNewCandidate();
+    console.log(candidateArray);
     checkIfWalletIsConnected();
   }, []);
 

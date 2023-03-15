@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
+import { useRouter } from 'next/router';
 import Image from "next/image";
 import Link from "next/link";
 import { AiFillLock, AiFillUnlock } from "react-icons/ai";
@@ -23,6 +24,14 @@ const NavBar = () => {
   const fetchAccount = async () =>{
     const authorizer = await fetchAuthorizerAddress()
     setAthorizerAccount(authorizer.toLowerCase())
+    const router = useRouter();
+    const handleGoToPage1 = () =>{
+      router.push('/parent-page/page-1');
+      };
+
+    const handle1GoToPage2 = () => {
+      router.push('/parent-page/page-2');
+    };
     //  console.log(authorizer.toLowerCase() === currentAccount.toLowerCase())
     // //console.log(authorizerAccount)
     // console.log("authorizer", await fetchAuthorizerAddress());
@@ -60,29 +69,35 @@ const NavBar = () => {
               </p>
               {/* {authorizerAccount === currentAccount.toLowerCase() ?  */}
 
-              
               <p>
+              <Link className={Style.linkWeight} href={{ pathname: "./registrationPortal" }}>
+                Registration
+              </Link>
+            </p>
+
+
+              {/* <p>
               <Link className={Style.linkWeight} href={{ pathname: "candidateFactory" }}>
                 Candidates
               </Link>
-            </p>
+            </p> */}
             {/* :""} */}
               {/* {authorizerAccount === currentAccount.toLowerCase() ? */}
-              <p>
+              {/* <p>
                 <Link href={{ pathname: "votersFactory" }}>
                   Voters
                 </Link>
-              </p>
+              </p> */}
               {/* :""} */}
 
               <p>
                         <Link href={{ pathname: "electionKeys" }}>
-                          Election Protocols
+                          Protocols
                         </Link>
                       </p>
                       
               <p>
-                <Link href={{ pathname: "ListOfVoters" }}>Election Summary</Link>
+                <Link href={{ pathname: "ListOfVoters" }}>Voters</Link>
               </p>
 
               <p>
@@ -131,13 +146,13 @@ const NavBar = () => {
 
                       <p>
                         <Link href={{ pathname: "electionKeys" }}>
-                          Election Protocols
+                          Protocols
                         </Link>
                       </p>
 
                       <p>
                         <Link href={{ pathname: "ListOfVoters" }}>
-                          Election Summary
+                          Voters
                         </Link>
                       </p>
                       

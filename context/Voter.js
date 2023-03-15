@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 
 //INTERNAL IMPORT
 import { VotingAddress, VotingAddressABI } from "./constants";
+//import ListOfVoters from "../pages/ListOfVoters";
 
 
 // IPFS credentials
@@ -100,6 +101,7 @@ export const VotingProvider = ({ children }) => {
 
     setCurrentAccount(accounts[0]);
     getAllVoterData();
+    //console.log(getAllVoterData)
     getNewCandidate();
   };
  
@@ -148,8 +150,9 @@ export const VotingProvider = ({ children }) => {
   
   
   //Function to Create Voter
-  const createVoter = async (formInput, fileUrl) => {
+  const createVoter = async (formInput, fileUrl, router) => {
     const { name, address, position } = formInput;
+    console.log(formInput)
 
     if (!name || !address || !position)
       return console.log("Please, check your input. Something is missing!");  // Validate input data
@@ -160,41 +163,57 @@ export const VotingProvider = ({ children }) => {
     const signer = provider.getSigner(); // Get signer
     const contract = fetchContract(signer); // Fetch contract instance
 
-    const data = JSON.stringify({ name, address, position, image: fileUrl });// Serialize voter data
+    const data = JSON.stringify({ 
+      name, 
+      address, 
+      image: fileUrl,
+      position
+    });// Serialize voter data
+    console.log(data)
     const added = await client.add(data); // Add voter data to IPFS
+    console.log(added)
 
     const url = `${subdomain}/ipfs/${added.path}`; // Generate URL to access voter data //`${subdomain}/ipfs/${added.path}` `https://ipfs.infura.io/ipfs/${added.path}`;
-
-    const voter = await contract.createVoters(address, name, url, fileUrl); // Create voter using contract method
+    console.log(url)
+    const voter = await contract.createVoters(
+      address,
+      name,
+      fileUrl,
+      //position,
+      url); // Create voter using contract method
     voter.wait();  // Wait for voter creation
-
+    console.log(voter)
     router.push("/ListOfVoters"); // Navigate to voter list page
   };
+
   // =============================================
 
   const getAllVoterData = async () => {
-    try {
-             //VOTER LIST
-      const voterListData = await contract.get_voter_list();
+    const web3Modal = new Web3Modal();
+    const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner();
+    const contract = fetchContract(signer);
+    return await contract.authorizer();
+    
+    //VOTER LIST
+    const voterListData = await contract.get_voter_list();
       console.log(voterListData)
       setVoterAddress(voterListData);
+      console.log(setVoterAddress(VoterListData))
       
-      voterListData.map(async (el) => {
-        
+      const voterDetails = await Promise.all(voterListData.map(async (el) => {
         const singleVoterData = await contract.getVoterDetails(el);
-        
-        pushVoter.push(singleVoterData);
-      });
+        return singleVoterData;
+    }));
+    setVoters(voterDetails);
 
-      //VOTER LENGTH
-      const voterList = await contract.getVoterLength();
-      setVoterLength(voterList.toNumber());
-      console.log(voterLength);
-    } catch (error) {
-      console.log("All data");
-    }
-  };
-
+    //VOTER LENGTH
+    const voterList = await contract.getVotersLength();
+    console.log(voterList)
+    setVoterLength(voterList.toNumber());
+    console.log("voterList", voterList);
+};
   // =============================================
 
   // =============================================
@@ -324,7 +343,7 @@ const endElection = async () => {
     );
     candidate.wait();
 
-    router.push("/");
+    router.push("/pollingBooth");
   };
 
   const getNewCandidate = async () => {
@@ -333,7 +352,7 @@ const endElection = async () => {
     const provider = new ethers.providers.Web3Provider(connection);
     const signer = provider.getSigner();
     const contract = fetchContract(signer);
-    console.log(contract);
+    // console.log(contract);
 
     //---------ALL CANDIDATE
     const allCandidate = await contract.getCandidateAddress();
@@ -344,7 +363,7 @@ const endElection = async () => {
     //--------CANDIDATE DATA
     allCandidate.map(async (el) => {
       const singleCandidateData = await contract.getCandidateData(el);
-
+      console.log(singleCandidateData)
       pushCandidate.push(singleCandidateData);
       candidateIndex.push(singleCandidateData[2].toNumber());
     });
@@ -352,6 +371,7 @@ const endElection = async () => {
     //---------CANDIDATE LENGTH
     const allCandidateLength = await contract.getCandidateAddressesLength();
     setCandidateLength(allCandidateLength.toNumber());
+    console.log(allCandidateLength)
   };
 
   console.log(error);
