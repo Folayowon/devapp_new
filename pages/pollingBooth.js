@@ -16,6 +16,7 @@ const pollingBooth = () => {
     candidateArray,
     giveVote,
     connectWallet,
+    //startElection,
     checkIfWalletIsConnected,
     candidateLength,
     getAllVoterData,

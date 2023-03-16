@@ -14,7 +14,7 @@ contract Devapp {
     address[] public candidateAddresses; // public array to store the addresses of all candidates
     address[] public voterAddresses; // public array to store the addresses of all voters
     uint256 public totalVotes;
-    uint256 public constant ELECTION_DURATION = 30 minutes;
+    uint256 public constant ELECTION_DURATION = 2 minutes;
     uint256 public startTime;
     bool public ended;
     bool public started;
@@ -75,9 +75,21 @@ contract Devapp {
     // Modifiers
     modifier onlyAuthorizer() {
         require(msg.sender == authorizer, "Only the contract authorizer can call this function."); // restrict function access to only the authorizer
+        
+        _; // execute the function
+    }
+
+    modifier onlyAuthorizerOnTime(){
+        require(msg.sender == authorizer, "Only the contract authorizer can call this function."); // restrict function access to only the authorizer
         require(state == ElectionState.NotStarted, "Election has already started."); //restrict function accessible only if the election has not yet started
         require(state != ElectionState.Ended, "Election has already ended" );// restrict function accessible only if the election has not yet started and ended.
         _; // execute the function
+    }
+
+    modifier publicTimeConstraint(){
+        require(state == ElectionState.NotStarted, "Election has already started."); //restrict function accessible only if the election has not yet started
+        require(state != ElectionState.Ended, "Election has already ended" );// restrict function accessible only if the election has not yet started and ended.
+        _;// execute the function
     }
 
   
@@ -94,7 +106,7 @@ contract Devapp {
         string memory _age,
         string memory _image,
         string memory _ipfs
-    ) public onlyAuthorizer{
+    ) public onlyAuthorizerOnTime{
         require(_addr != address(0), "Candidate address cannot be zero");
         _candidateId.increment(); // increment the candidate counter
         uint256 id_number = _candidateId.current(); // get the current value of the candidate counter
@@ -164,7 +176,7 @@ contract Devapp {
         string memory _name,
         string memory _image,
         string memory _ipfs
-    ) public onlyAuthorizer{
+    ) public onlyAuthorizerOnTime{
         _voterId.increment();
         uint256 id = _voterId.current();
         Voter storage voter = voters[_addr];
@@ -192,7 +204,7 @@ contract Devapp {
 
     }
 
-    function voteBooth(address _candidateAddr, uint256 _candidateUniqueId) external onlyAuthorizer{
+    function voteBooth(address _candidateAddr, uint256 _candidateUniqueId) external publicTimeConstraint{
         Voter storage voter = voters[msg.sender];
         require(!voter.voted, "You can't vote twice." );
         require(voter.voteCredits != 0, "Your account isn't registered or authorized." );
@@ -236,11 +248,11 @@ contract Devapp {
     return voterAddresses;
     }
 
-    // function commenceElection(bool) public onlyAuthorizer{
+    function commenceElection(bool) public onlyAuthorizerOnTime{
+        state = ElectionState.Started;
+        startTime = block.timestamp;
         
-    //     startTime = block.timestamp;
-    //     state = ElectionState.Started;
-    // }
+    }
      
     // function getTimeLeft() public returns (uint256) {
     //     require (state != ElectionState.NotStarted, "Election has not yet started.");
