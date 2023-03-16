@@ -3,11 +3,13 @@ import VoterCard from "../components/voterCard/voterCard";
 import Style from "../styles/voterList.module.css";
 import { VotingContext } from "../context/Voter";
 
-const VoterList = () => {
+const ListOfVoters = () => {
   const { getAllVoterData, voterArray } = useContext(VotingContext);
 
   useEffect(() => {
     getAllVoterData();
+    console.log(voterArray)
+    
   }, []);
 
   return (
@@ -17,4 +19,4 @@ const VoterList = () => {
   );
 };
 
-export default VoterList;
+export default ListOfVoters;

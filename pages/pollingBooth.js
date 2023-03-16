@@ -27,6 +27,7 @@ const pollingBooth = () => {
     getNewCandidate();
     console.log(candidateArray);
     checkIfWalletIsConnected();
+    
   }, []);
 
   return (

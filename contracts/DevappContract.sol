@@ -236,11 +236,11 @@ contract Devapp {
     return voterAddresses;
     }
 
-    function commenceElection(bool) public onlyAuthorizer{
+    // function commenceElection(bool) public onlyAuthorizer{
         
-        startTime = block.timestamp;
-        state = ElectionState.Started;
-    }
+    //     startTime = block.timestamp;
+    //     state = ElectionState.Started;
+    // }
      
     // function getTimeLeft() public returns (uint256) {
     //     require (state != ElectionState.NotStarted, "Election has not yet started.");

@@ -10,7 +10,7 @@ const card = ({ candidateArray, giveVote }) => {
       {candidateArray.map((el, i) => (
         <div className={Style.card_box}>
           <div className={Style.image}>
-            <img src={el[3]} alt="Profile photo" />
+            <Image src={el[3]} alt="Profile photo" />
           </div>
 
           <div className={Style.card_info}>

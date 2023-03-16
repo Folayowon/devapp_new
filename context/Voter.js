@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from "react";
 import Web3Modal from "web3modal";
 import { ethers } from "ethers";
-import { create as ipfsHttpClient } from "ipfs-http-client";
+import { create } from "ipfs-http-client";
 import axios from "axios";
 import { useRouter } from "next/router";
 
@@ -22,7 +22,7 @@ const auth = `Basic ${Buffer.from(`${projectId}:${projectSecretKey}`).toString(
 
 const subdomain = "https://devapp.infura-ipfs.io";
 
-const client = ipfsHttpClient({
+const client = create({
   host: "infura-ipfs.io",
   port: 5001,
   protocol: "https",
@@ -130,7 +130,7 @@ export const VotingProvider = ({ children }) => {
       // setImage(url);
       return url;
     } catch (error) {
-      console.log("Encountered an error while uploading file to IPFS."); // Handle error if encountered while uploading file to IPFS
+      alert("Encountered an error while uploading file to IPFS."); // Handle error if encountered while uploading file to IPFS
     }  
   }; 
 
@@ -144,60 +144,17 @@ export const VotingProvider = ({ children }) => {
       console.log(url);
       return url;
     } catch (error) {
-      console.log("Encountered an error while uploading file to IPFS."); // Handle error if encountered while uploading file to IPFS
+      alert("Encountered an error while uploading file to IPFS."); // Handle error if encountered while uploading file to IPFS
     }
   };
   
   
   //Function to Create Voter
-  // const createVoter = async (formInput, fileUrl, router) => {
-  //   const { name, address, position } = formInput;
-  //   console.log(formInput)
-
-  //   if (!name || !address || !position)
-  //     return console.log("Please, check your input. Something is missing!");  // Validate input data
-
-  //   const web3Modal = new Web3Modal(); // Create Web3Modal instance
-  //   const connection = await web3Modal.connect(); // Connect to Web3Modal
-  //   const provider = new ethers.providers.Web3Provider(connection); // Create Web3Provider instance
-  //   const signer = provider.getSigner(); // Get signer
-  //   const contract = fetchContract(signer); // Fetch contract instance
-
-  //   // const data = JSON.stringify(fileUrl);// Serialize voter data
-  //   // console.log(data)
-  //   // const added = await client.add(fileUrl); // Add voter data to IPFS
-  //   // console.log(added)
-
-  //   // const url = `${subdomain}/ipfs/${added.path}`; // Generate URL to access voter data //`${subdomain}/ipfs/${added.path}` `https://ipfs.infura.io/ipfs/${added.path}`;
-  //   // console.log(url)
-
-
-
-  //   const data = JSON.stringify({
-  //     name,
-  //     address,
-  //     image: fileUrl,
-  //     position,
-  //   });
-  //   const added = await client.add(data);
-  //   console.log ("added ...", added)
-  //   const ipfs = `${subdomain}/ipfs/${added.path}`;
-  //   const voter = await contract.createVoters(
-  //     address,
-  //     name,
-  //     fileUrl,
-  //     //position,
-  //     // url,
-  //     ipfs ); // Create voter using contract method
-  //   // voter.wait();  // Wait for voter creation
-  //   console.log(voter)
-  //   router.push("/ListOfVoters"); // Navigate to voter list page
-  // };
 
   const createVoter = async (formInput, fileUrl, router) => {
     const { name, address, position } = formInput;
 
-    if (!name || !address || !position) return console.log("Input Data is missing");
+    if (!name || !address || !position) return alert("Input data is missing");
 
     const web3Modal = new Web3Modal();
     const connection = await web3Modal.connect();
@@ -213,13 +170,14 @@ export const VotingProvider = ({ children }) => {
     });
     const added = await client.add(data);
     console.log ("added ...", added)
+    
     const ipfs = `${subdomain}/ipfs/${added.path}`; // `${subdomain}/ipfs/${added.path}``https://ipfs.infura.io/ipfs/${added.path}`;
 
     const candidate = await contract.createVoters(
       address,
       name,
-      fileUrl,
-      ipfs
+      ipfs,
+      fileUrl
     );
     candidate.wait();
 
@@ -259,42 +217,42 @@ export const VotingProvider = ({ children }) => {
 
   // =============================================
 //START ELECTION
-const startElection = async (value) => {
-  try {
+// const startElection = async (value) => {
+//   try {
    
-    const web3Modal = new Web3Modal(); // Create Web3Modal instance
-const connection = await web3Modal.connect(); // Connect to Web3Modal
-const provider = new ethers.providers.Web3Provider(connection); // Create Web3Provider instance
-const signer = provider.getSigner(); // Get signer
-const contract = fetchContract(signer); // Fetch contract instance
-console.log(contract) // Log contract instance to console
+//     const web3Modal = new Web3Modal(); // Create Web3Modal instance
+// const connection = await web3Modal.connect(); // Connect to Web3Modal
+// const provider = new ethers.providers.Web3Provider(connection); // Create Web3Provider instance
+// const signer = provider.getSigner(); // Get signer
+// const contract = fetchContract(signer); // Fetch contract instance
+// console.log(contract) // Log contract instance to console
 
-    const electionStatus = await contract.commenceElection(value);
+//     const electionStatus = await contract.commenceElection(value);
 
-    console.log(electionStatus);
-  } catch (error) {
-    console.log(error.message)
-    // setError("Ops! You can't vote twice. Reload Browser");
-  }
-};
+//     console.log(electionStatus);
+//   } catch (error) {
+//     alert(error.message)
+//     // setError("Ops! You can't vote twice. Reload Browser");
+//   }
+// };
 
-const endElection = async () => {
+// const endElection = async () => {
 
-  try {
+//   try {
    
-    const web3Modal = new Web3Modal();
-    const connection = await web3Modal.connect();
-    const provider = new ethers.providers.Web3Provider(connection);
-    const signer = provider.getSigner();
-    const contract = fetchContract(signer);
+//     const web3Modal = new Web3Modal();
+//     const connection = await web3Modal.connect();
+//     const provider = new ethers.providers.Web3Provider(connection);
+//     const signer = provider.getSigner();
+//     const contract = fetchContract(signer);
 
-    const electionStatus = await contract.electionEnds();
-    console.log(electionStatus);
-  } catch (error) {
-    console.log(error)
-    // setError("Ops! You can't vote twice. Reload Browser");
-  }
-}
+//     const electionStatus = await contract.electionEnds();
+//     console.log(electionStatus);
+//   } catch (error) {
+//     console.log(error)
+//     // setError("Ops! You can't vote twice. Reload Browser");
+//   }
+// }
 
 // const CountdownTimer = async () => {
 //   // const [timerStatus, setTimerStatus] = useState(0);
@@ -357,7 +315,7 @@ const endElection = async () => {
   const setCandidate = async (candidateForm, fileUrl, router) => {
     const { name, address, age } = candidateForm;
 
-    if (!name || !address || !age) return console.log("Input Data is missing");
+    if (!name || !address || !age) return alert("Input Data is missing");
 
     const web3Modal = new Web3Modal();
     const connection = await web3Modal.connect();
