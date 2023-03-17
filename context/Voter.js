@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 //INTERNAL IMPORT
 import { VotingAddress, VotingAddressABI } from "./constants";
 //import ListOfVoters from "../pages/ListOfVoters";
+import Devapp from "./Devapp.json";
 
 
 // IPFS credentials
@@ -63,7 +64,7 @@ export const VotingProvider = ({ children }) => {
   //   timing()
   //   })
 
-  
+
 
 
  // MetaMask connection check
@@ -148,6 +149,26 @@ export const VotingProvider = ({ children }) => {
     }
   };
   
+
+  //Function to check if Admin
+  const checkIfAdmin = async() => {
+    const web3Modal = new Web3Modal();
+    const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner();
+    const contract = fetchContract(signer);
+    const accounts = await provider.listAccounts();
+    const userAddress = accounts[0];
+    const adminAddress = await contract.getAdmin();
+
+
+    return userAddress === adminAddress;
+    // if (userAddress === adminAddress) {
+    //   // show admin-only pages in the navbar
+    // }
+
+
+  }
   
   //Function to Create Voter
 
@@ -250,7 +271,7 @@ console.log(contract) // Log contract instance to console
       const voteredList = await contract.voteBooth(voterAddress, voterId);
       console.log(voteredList);
     } catch (error) {
-      console.log(error.message);
+      alert(error.message);
     }
   };
   // =============================================
@@ -325,6 +346,7 @@ console.log(contract) // Log contract instance to console
         uploadToIPFS,
         //CountdownTimer,
         //endElection,
+        checkIfAdmin,
         startElection,
         createVoter,
         setCandidate,

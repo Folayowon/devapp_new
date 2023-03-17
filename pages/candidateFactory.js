@@ -12,6 +12,7 @@ import Button from "../components/Button/Button";
 import Input from "../components/Input/Input";
 import voter from "../voter.jpg";
 
+
 const candidateRegistration = () => {
   const [fileUrl, setFileUrl] = useState(null);
   const {

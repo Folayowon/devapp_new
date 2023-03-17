@@ -10,40 +10,44 @@ import Style from "./NavBar.module.css";
 import logo from "../../Log.svg";
 
 const NavBar = () => {
-  const { connectWallet, error, currentAccount, fetchAuthorizerAddress } = useContext(VotingContext);
+  const { connectWallet, error, currentAccount, checkIfAdmin, fetchAuthorizerAddress } = useContext(VotingContext);
   const [openNav, setOpenNav] = useState(true);
   const [authorizerAccount, setAthorizerAccount] = useState("")
-  const openNaviagtion = () => {
-    if (openNav) {
-      setOpenNav(false);
-    } else if (!openNav) {
-      setOpenNav(true);
-    }
-  };
+  const [isAdmin, setIsAdmin] = useState(false);
 
-  const fetchAccount = async () =>{
+  useEffect(() => {
+    fetchAccount();
+    checkIfAdmin().then(result => setIsAdmin(result));
+  }, []);
+
+  const fetchAccount = async () => {
     const authorizer = await fetchAuthorizerAddress()
     setAthorizerAccount(authorizer.toLowerCase())
-    const router = useRouter();
-    const handleGoToPage1 = () =>{
-      router.push('/parent-page/page-1');
-      };
-
-    const handle1GoToPage2 = () => {
-      router.push('/parent-page/page-2');
-    };
-    //  console.log(authorizer.toLowerCase() === currentAccount.toLowerCase())
-    // //console.log(authorizerAccount)
-    // console.log("authorizer", await fetchAuthorizerAddress());
-    // console.log("currentAccount", currentAccount)
   }
-  // useEffect(()=>{
-  //      fetchAccount()
-  // })
+
+  const renderAdminLinks = () => {
+    if (isAdmin) {
+      return (
+        <>
+          <p>
+            <Link className={Style.linkWeight} href={{ pathname: "./registrationPortal" }}>
+              Registration
+            </Link>
+          </p>
+
+          <p>
+            <Link href={{ pathname: "electionKeys" }}>
+              Protocols
+            </Link>
+          </p>
+        </>
+      )
+    }
+    return null;
+  }
+
   return (
-    
     <div className={Style.navbar}>
-      
       {error === "" ? (
         ""
       ) : (
@@ -67,35 +71,9 @@ const NavBar = () => {
               <p>
                 <Link href={{ pathname: "/" }}>Home</Link>
               </p>
-              {/* {authorizerAccount === currentAccount.toLowerCase() ?  */}
 
-              <p>
-              <Link className={Style.linkWeight} href={{ pathname: "./registrationPortal" }}>
-                Registration
-              </Link>
-            </p>
+              {renderAdminLinks()}
 
-
-              {/* <p>
-              <Link className={Style.linkWeight} href={{ pathname: "candidateFactory" }}>
-                Candidates
-              </Link>
-            </p> */}
-            {/* :""} */}
-              {/* {authorizerAccount === currentAccount.toLowerCase() ? */}
-              {/* <p>
-                <Link href={{ pathname: "votersFactory" }}>
-                  Voters
-                </Link>
-              </p> */}
-              {/* :""} */}
-
-              <p>
-                        <Link href={{ pathname: "electionKeys" }}>
-                          Protocols
-                        </Link>
-                      </p>
-                      
               <p>
                 <Link href={{ pathname: "ListOfVoters" }}>Voters</Link>
               </p>
@@ -105,65 +83,66 @@ const NavBar = () => {
                   Polling Booth
                 </Link>
               </p>
-
             </div>
           )}
 
-          <div className={Style.connect}>
-            {currentAccount ? (
-              <div>
-                <div className={Style.connect_flex}>
-                  <button onClick={() => openNaviagtion()}>
-                    {currentAccount.slice(0, 10)}..
-                  </button>
-                  {currentAccount && (
-                    <span className={Style.mobile}>
-                      {openNav ? (
-                        <AiFillUnlock onClick={() => openNaviagtion()} />
-                      ) : (
-                        <AiFillLock onClick={() => openNaviagtion()} />
-                      )}
-                    </span>
-                  )}
-                </div>
-                {openNav && (
-                  <div className={Style.nav}>
-                    <div className={Style.navigation}>
-                      <p>
-                        <Link href={{ pathname: "/" }}>Home</Link>
-                      </p>
-
-                      <p>
-                        <Link href={{ pathname: "candidateFactory" }}>
-                          Candidates
-                        </Link>
-                      </p>
-                      <p>
-                        <Link href={{ pathname: "votersFactory" }}>
-                          Voters
-                        </Link>
-                      </p>
-
-                      <p>
-                        <Link href={{ pathname: "electionKeys" }}>
-                          Protocols
-                        </Link>
-                      </p>
-
-                      <p>
-                        <Link href={{ pathname: "ListOfVoters" }}>
-                          Voters
-                        </Link>
-                      </p>
-                      
-                    </div>
-                  </div>
-                )}
-              </div>
+<div className={Style.connect}>
+  {currentAccount ? (
+    <div>
+      <div className={Style.connect_flex}>
+        <button onClick={() => openNaviagtion()}>
+          {currentAccount.slice(0, 10)}..
+        </button>
+        {currentAccount && (
+          <span className={Style.mobile}>
+            {openNav ? (
+              <AiFillUnlock onClick={() => openNaviagtion()} />
             ) : (
-              <button onClick={() => connectWallet()}>Connect Wallet</button>
+              <AiFillLock onClick={() => openNaviagtion()} />
             )}
+          </span>
+        )}
+      </div>
+
+      {openNav && (
+        <div className={Style.nav}>
+          <div className={Style.navigation}>
+            <p>
+              <Link href={{ pathname: "/" }}>Home</Link>
+            </p>
+
+            {isAdmin && (
+              <>
+                <p>
+                  <Link className={Style.linkWeight} href={{ pathname: "./registrationPortal" }}>
+                    Registration
+                  </Link>
+                </p>
+                <p>
+                  <Link href={{ pathname: "electionKeys" }}>
+                    Protocols
+                  </Link>
+                </p>
+              </>
+            )}
+
+            <p>
+              <Link href={{ pathname: "ListOfVoters" }}>Voters</Link>
+            </p>
+
+            <p>
+              <Link href={{ pathname: "pollingBooth" }}>
+                Polling Booth
+              </Link>
+            </p>
           </div>
+        </div>
+      )}
+    </div>
+  ) : (
+    <button onClick={() => connectWallet()}>Connect Wallet</button>
+  )}
+</div>
         </div>
       </div>
     </div>

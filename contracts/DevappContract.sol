@@ -18,6 +18,8 @@ contract Devapp {
     uint256 public startTime;
     bool public ended;
     bool public started;
+    //address public admin;
+
     enum ElectionState { NotStarted, Started, Ended }
     ElectionState public state = ElectionState.NotStarted;
 
@@ -99,6 +101,12 @@ contract Devapp {
         state = ElectionState.NotStarted;
         
     }
+
+
+    function getAdmin() public view returns (address) {
+    // Only the owner of the contract is an admin
+    return authorizer;
+}
 
     function createCandidate(
         address _addr,
