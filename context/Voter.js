@@ -152,23 +152,31 @@ export const VotingProvider = ({ children }) => {
 
   //Function to check if Admin
   const checkIfAdmin = async() => {
-    const web3Modal = new Web3Modal();
-    const connection = await web3Modal.connect();
-    const provider = new ethers.providers.Web3Provider(connection);
-    const signer = provider.getSigner();
-    const contract = fetchContract(signer);
-    const accounts = await provider.listAccounts();
-    const userAddress = accounts[0];
-    const adminAddress = await contract.getAdmin();
-
-
-    return userAddress === adminAddress;
-    // if (userAddress === adminAddress) {
-    //   // show admin-only pages in the navbar
-    // }
-
-
+    
+    if (!window.ethereum) return setError("Please, install MetaMask.");
+  
+    const accounts = await window.ethereum.request({ method: "eth_accounts" });
+  
+    if (accounts && accounts.length > 0) { // Add a check to ensure accounts is not undefined
+      setCurrentAccount(accounts[0]);
+      const web3Modal = new Web3Modal();
+      const connection = await web3Modal.connect();
+      const provider = new ethers.providers.Web3Provider(connection);
+      const signer = provider.getSigner();
+      const contract = fetchContract(signer);
+      const account = await provider.listAccounts();
+      const userAddress = account[0];
+      const adminAddress = await contract.getAdmin();
+  
+  
+      return userAddress === adminAddress;
+        //getAllVoterData();
+        
+    } else { 
+      setError("Please, connect your wallet.");
+    }
   }
+  
   
   //Function to Create Voter
 
@@ -255,6 +263,50 @@ console.log(contract) // Log contract instance to console
     // setError("Ops! You can't vote twice. Reload Browser");
   }
 };
+
+
+
+//END ELECTION
+const endElection = async (value) => {
+  try {
+   
+    const web3Modal = new Web3Modal(); // Create Web3Modal instance
+const connection = await web3Modal.connect(); // Connect to Web3Modal
+const provider = new ethers.providers.Web3Provider(connection); // Create Web3Provider instance
+const signer = provider.getSigner(); // Get signer
+const contract = fetchContract(signer); // Fetch contract instance
+console.log(contract) // Log contract instance to console
+
+    const electionStatus = await contract.endElection(value);
+
+    console.log(electionStatus);
+  } catch (error) {
+    alert(error.message)
+    // setError("Ops! You can't vote twice. Reload Browser");
+  }
+};
+
+
+const resetElection = async (value) => {
+  try {
+   
+    const web3Modal = new Web3Modal(); // Create Web3Modal instance
+const connection = await web3Modal.connect(); // Connect to Web3Modal
+const provider = new ethers.providers.Web3Provider(connection); // Create Web3Provider instance
+const signer = provider.getSigner(); // Get signer
+const contract = fetchContract(signer); // Fetch contract instance
+console.log(contract) // Log contract instance to console
+
+    const electionStatus = await contract.resetElection(value);
+
+    console.log(electionStatus);
+  } catch (error) {
+    alert(error.message)
+    // setError("Ops! You can't vote twice. Reload Browser");
+  }
+};
+
+
 
   
   ////////GIVE VOTE
@@ -344,10 +396,10 @@ console.log(contract) // Log contract instance to console
         connectWallet,
         fetchAuthorizerAddress,
         uploadToIPFS,
-        //CountdownTimer,
-        //endElection,
         checkIfAdmin,
         startElection,
+        endElection,
+        resetElection,
         createVoter,
         setCandidate,
         getNewCandidate,
@@ -369,83 +421,3 @@ console.log(contract) // Log contract instance to console
   );
 };
 
-
-// =============================================
-
-  // =============================================
-//START ELECTION
-// const startElection = async (value) => {
-//   try {
-   
-//     const web3Modal = new Web3Modal(); // Create Web3Modal instance
-// const connection = await web3Modal.connect(); // Connect to Web3Modal
-// const provider = new ethers.providers.Web3Provider(connection); // Create Web3Provider instance
-// const signer = provider.getSigner(); // Get signer
-// const contract = fetchContract(signer); // Fetch contract instance
-// console.log(contract) // Log contract instance to console
-
-//     const electionStatus = await contract.commenceElection(value);
-
-//     console.log(electionStatus);
-//   } catch (error) {
-//     alert(error.message)
-//     // setError("Ops! You can't vote twice. Reload Browser");
-//   }
-// };
-
-// const endElection = async () => {
-
-//   try {
-   
-//     const web3Modal = new Web3Modal();
-//     const connection = await web3Modal.connect();
-//     const provider = new ethers.providers.Web3Provider(connection);
-//     const signer = provider.getSigner();
-//     const contract = fetchContract(signer);
-
-//     const electionStatus = await contract.electionEnds();
-//     console.log(electionStatus);
-//   } catch (error) {
-//     console.log(error)
-//     // setError("Ops! You can't vote twice. Reload Browser");
-//   }
-// }
-
-// const CountdownTimer = async () => {
-//   // const [timerStatus, setTimerStatus] = useState(0);
-
-//   // useEffect(() => {
-//   //   const getTimerStatus = async () => {
-//       try {
-//         const web3Modal = new Web3Modal();
-//         const connection = await web3Modal.connect();
-//         const provider = new ethers.providers.Web3Provider(connection);
-//         const signer = provider.getSigner();
-//         const contract = fetchContract(signer);
-//         const timerStatus = await contract.getTimeLeft();
-//         console.log(newDate(timerStatus.toNumber()).getTime())// setTimerStatus(timerStatus);
-//       } catch (error) {
-//         console.log(error.message);
-//       }
-//     };
-
-    // getTimerStatus();
-    // const interval = setInterval(() => {
-    //   getTimerStatus();
-    // }, 10000);
-
-    // return () => clearInterval(interval);
-  // }, []);
-
-  // const formatCountdown = (countdown) => {
-  //   const hours = Math.floor(countdown / 3600);
-  //   const minutes = Math.floor((countdown % 3600) / 60);
-  //   const seconds = Math.floor(countdown % 60);
-  //   return `${hours}:${minutes}:${seconds}`;
-  // };
-  // return (
-  //   <div>
-  //     Time left: {formatCountdown(timerStatus)}
-  // //   </div>
-  // );
-// }

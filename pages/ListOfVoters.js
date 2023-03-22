@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, {useEffect, useContext } from "react";
 import VoterCard from "../components/voterCard/voterCard";
 import Style from "../styles/voterList.module.css";
 import { VotingContext } from "../context/Voter";
@@ -8,7 +8,7 @@ const ListOfVoters = () => {
 
   useEffect(() => {
     getAllVoterData();
-    console.log(voterArray)
+    // console.log(voterArray)
     
   }, []);
 

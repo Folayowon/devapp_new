@@ -14,16 +14,16 @@ const NavBar = () => {
   const [openNav, setOpenNav] = useState(true);
   const [authorizerAccount, setAthorizerAccount] = useState("")
   const [isAdmin, setIsAdmin] = useState(false);
+  const [connected, setConnected] = useState(false);
 
   useEffect(() => {
-    fetchAccount();
+    if (currentAccount) {
+      setConnected(true);
+    }
     checkIfAdmin().then(result => setIsAdmin(result));
-  }, []);
+  }, [currentAccount]);
 
-  const fetchAccount = async () => {
-    const authorizer = await fetchAuthorizerAddress()
-    setAthorizerAccount(authorizer.toLowerCase())
-  }
+ 
 
   const renderAdminLinks = () => {
     if (isAdmin) {
@@ -90,15 +90,15 @@ const NavBar = () => {
   {currentAccount ? (
     <div>
       <div className={Style.connect_flex}>
-        <button onClick={() => openNaviagtion()}>
+        <button onClick={() => setOpenNav()}>
           {currentAccount.slice(0, 10)}..
         </button>
         {currentAccount && (
           <span className={Style.mobile}>
             {openNav ? (
-              <AiFillUnlock onClick={() => openNaviagtion()} />
+              <AiFillUnlock onClick={() => setOpenNav()} />
             ) : (
-              <AiFillLock onClick={() => openNaviagtion()} />
+              <AiFillLock onClick={() => setOpenNav()} />
             )}
           </span>
         )}

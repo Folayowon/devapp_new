@@ -78,7 +78,7 @@ const index = () => {
             <div className={Style.btnContainer}>
               {/* <button >Register</button> */}
               {!currentAccount && (
-                <button className={Style.btn} onClick={() => connectWallet()}>
+                <button className={Style.btn} onClick={connectWallet}>
                   Connect Wallet
                 </button>
               )}
