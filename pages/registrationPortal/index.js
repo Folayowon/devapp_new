@@ -39,27 +39,22 @@ const index = () => {
   }, []);
 
   return (
-    
-    <div>
-        
-    <div className={Style.Button}>
+    <div className={Style.containerReg}>
+      <div className={Style.itemReg}>
         <Button
           btnName="Register Candidate"
           handleClick={() => handleCandidateRegistration(true)}
-          />
-        
-      </div>
-
-     
-      <div className={Style.Button}>
-        <Button
-        btnName="Register Voter"
-        handleClick={() => handleVoterRegistration(true)}
         />
       </div>
-  </div>
-);
+      <div className={Style.itemReg}></div>
+      <div className={`${Style.itemReg} ${Style.bottomReg}`}>
+        <Button
+          btnName="Register Voter"
+          handleClick={() => handleVoterRegistration(true)}
+        />
+      </div>
+    </div>
+  );
 };
 
 export default index;
-
