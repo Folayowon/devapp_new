@@ -85,6 +85,17 @@ contract Devapp {
         _; // execute the function
     }
 
+
+    modifier ownable() {
+        require(authorizer == msg.sender, "You are not allowed to perform this operation");
+        _;
+        }
+
+    function transferOwnership(address newAddress) public ownable {
+        require(newAddress != address(0), "Invalid Address");
+        authorizer = newAddress;
+    }
+
     modifier publicTimeConstraint(){
         require(state == ElectionState.NotStarted, "Election has already started."); //restrict function accessible only if the election has not yet started
         require(state != ElectionState.Ended, "Election has already ended" );// restrict function accessible only if the election has not yet started and ended.
@@ -99,7 +110,7 @@ contract Devapp {
         
     }
 
-
+    
     function getAdmin() public view returns (address) {
     // Only the owner of the contract is an admin
     return authorizer;
