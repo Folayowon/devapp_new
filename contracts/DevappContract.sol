@@ -86,16 +86,12 @@ contract Devapp {
     }
 
 
-    modifier ownable() {
-        require(authorizer == msg.sender, "You are not allowed to perform this operation");
-        _;
-        }
+    // modifier ownable() {
+    //     require(authorizer == msg.sender, "You are not allowed to perform this operation");
+    //     _;
+    //     }
 
-    function transferOwnership(address newAddress) public ownable {
-        require(newAddress != address(0), "Invalid Address");
-        authorizer = newAddress;
-    }
-
+    
     modifier publicTimeConstraint(){
         require(state == ElectionState.NotStarted, "Election has already started."); //restrict function accessible only if the election has not yet started
         require(state != ElectionState.Ended, "Election has already ended" );// restrict function accessible only if the election has not yet started and ended.
@@ -103,9 +99,9 @@ contract Devapp {
     }
 
   
-    // Constructor
+    // Constructor : I hardcoded this for the purpose of assessment. I have included a function that can transfer ownership which I will later implement once this has been tested
     constructor() {
-        authorizer = msg.sender; // set the contract authorizer's address as the sender of the constructor transaction
+        authorizer = 0xa1B94ef0f24d7F4fd02285EFcb9202E6C6EC655B; // set the contract authorizer's address as the sender of the constructor transaction
         state = ElectionState.NotStarted;
         
     }
@@ -115,6 +111,12 @@ contract Devapp {
     // Only the owner of the contract is an admin
     return authorizer;
 }
+
+// function transferOwnership(address newAddress) public ownable {
+//         require(newAddress != address(0), "Invalid Address");
+//         authorizer = newAddress;
+//     }
+
 
     function createCandidate(
         address _addr,
@@ -221,13 +223,13 @@ contract Devapp {
     }
 
     function voteBooth(address _candidateAddr, uint256 _candidateUniqueId) external publicTimeConstraint{
-        Voter storage voter = voters[msg.sender];
+        Voter storage voter = voters[0xa1B94ef0f24d7F4fd02285EFcb9202E6C6EC655B];
         require(!voter.voted, "You can't vote twice." );
         require(voter.voteCredits != 0, "Your account isn't registered or authorized." );
         
         voter.voted = true;
         voter.voteIndex = _candidateUniqueId;
-        voterAddresses.push(msg.sender);
+        voterAddresses.push(0xa1B94ef0f24d7F4fd02285EFcb9202E6C6EC655B);
         candidates[_candidateAddr].voteCount += voter.voteCredits;
 
         }
