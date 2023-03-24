@@ -10,41 +10,16 @@ import Style from "./NavBar.module.css";
 import logo from "../../Log.svg";
 
 const NavBar = () => {
-  const { connectWallet, error, currentAccount, checkIfAdmin, fetchAuthorizerAddress } = useContext(VotingContext);
+  const { connectWallet, error, currentAccount, fetchAuthorizerAddress } = useContext(VotingContext);
   const [openNav, setOpenNav] = useState(true);
   const [authorizerAccount, setAthorizerAccount] = useState("")
-  const [isAdmin, setIsAdmin] = useState(false);
   const [connected, setConnected] = useState(false);
 
   useEffect(() => {
     if (currentAccount) {
       setConnected(true);
     }
-    checkIfAdmin().then(result => setIsAdmin(result));
   }, [currentAccount]);
-
- 
-
-  const renderAdminLinks = () => {
-    if (isAdmin) {
-      return (
-        <>
-          <p>
-            <Link className={Style.linkWeight} href={{ pathname: "./registrationPortal" }}>
-              Registration
-            </Link>
-          </p>
-
-          <p>
-            <Link href={{ pathname: "electionKeys" }}>
-              Protocols
-            </Link>
-          </p>
-        </>
-      )
-    }
-    return null;
-  }
 
   return (
     <div className={Style.navbar}>
@@ -72,7 +47,17 @@ const NavBar = () => {
                 <Link href={{ pathname: "/" }}>Home</Link>
               </p>
 
-              {renderAdminLinks()}
+              <p>
+                <Link className={Style.linkWeight} href={{ pathname: "./registrationPortal" }}>
+                  Registration
+                </Link>
+              </p>
+
+              <p>
+                <Link href={{ pathname: "electionKeys" }}>
+                  Protocols
+                </Link>
+              </p>
 
               <p>
                 <Link href={{ pathname: "ListOfVoters" }}>Voters</Link>
@@ -86,48 +71,48 @@ const NavBar = () => {
             </div>
           )}
 
-<div className={Style.connect}>
-  {currentAccount ? (
-    <div>
-      <div className={Style.connect_flex}>
-        <button onClick={() => setOpenNav()}>
-          {currentAccount.slice(0, 10)}..
-        </button>
-        {currentAccount && (
-          <span className={Style.mobile}>
-            {openNav ? (
-              <AiFillUnlock onClick={() => setOpenNav()} />
-            ) : (
-              <AiFillLock onClick={() => setOpenNav()} />
-            )}
-          </span>
-        )}
-      </div>
+          <div className={Style.connect}>
+            {currentAccount ? (
+              <div>
+                <div className={Style.connect_flex}>
+                  <button onClick={() => setOpenNav()}>
+                    {currentAccount.slice(0, 10)}..
+                  </button>
+                  {currentAccount && (
+                    <span className={Style.mobile}>
+                      {openNav ? (
+                        <AiFillUnlock onClick={() => setOpenNav()} />
+                      ) : (
+                        <AiFillLock onClick={() => setOpenNav()} />
+                      )}
+                    </span>
+                  )}
+                </div>
 
-      {openNav && (
-        <div className={Style.nav}>
-          <div className={Style.navigation}>
-            <p>
-              <Link href={{ pathname: "/" }}>Home</Link>
-            </p>
+                {openNav && (
+                  <div className={Style.nav}>
+                    <div className={Style.navigation}>
+                      <p>
+                        <Link href={{ pathname: "/" }}>Home</Link>
+                      </p>
 
-            {isAdmin && (
-              <>
-                <p>
-                  <Link className={Style.linkWeight} href={{ pathname: "./registrationPortal" }}>
-                    Registration
-                  </Link>
-                </p>
-                <p>
-                  <Link href={{ pathname: "electionKeys" }}>
-                    Protocols
-                  </Link>
-                </p>
-              </>
-            )}
+                      <p>
+                        <Link className={Style.linkWeight} href={{ pathname: "./registrationPortal" }}>
+                          Registration
+                        </Link>
+                      </p>
 
-            <p>
-              <Link href={{ pathname: "ListOfVoters" }}>Voters</Link>
+                      <p>
+                        <Link href={{ pathname: "electionKeys" }}>
+                          Protocols
+                        </Link>
+                      </p>
+
+                      <p>
+                        <Link href={{ pathname
+
+
+: "ListOfVoters" }}>Voters</Link>
             </p>
 
             <p>

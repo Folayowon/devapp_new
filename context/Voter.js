@@ -64,6 +64,8 @@ export const VotingProvider = ({ children }) => {
   //   timing()
   //   })
 
+  const targetAddress = "0x6d7866E2d40c3feAEf6b4498c98AFbdF647dbC75";
+
 
 
 
@@ -118,6 +120,24 @@ export const VotingProvider = ({ children }) => {
      
   } 
 
+
+  // const confirmUserAddress = async (targetAddress) => {
+  //   const provider = new ethers.providers.Web3Provider(window.ethereum);
+  //   const signer = provider.getSigner();
+  //   const userAddress = await signer.getAddress();
+  //   return userAddress === targetAddress;
+  // };
+
+  const confirmUserAddress = async (targetAddress) => {
+    try {
+      const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+      const userAddress = accounts[0];
+      return userAddress === targetAddress;
+    } catch (error) {
+      console.error('Error while fetching user account:', error);
+      return false;
+    }
+  };
 
   //UPLOAD TO IPFS Voter
   const uploadToIPFS = async (file) => {
@@ -404,6 +424,7 @@ console.log(contract) // Log contract instance to console
         setCandidate,
         getNewCandidate,
         giveVote,
+        confirmUserAddress,
         pushCandidate,
         candidateArray,
         uploadToIPFSCandidate,
