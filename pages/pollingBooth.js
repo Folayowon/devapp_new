@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useContext } from "react";
-import { AiFillCaretRight } from "react-icons/ai";
-import Image from "next/image";
-import Countdown from "react-countdown";
+// import { AiFillCaretRight } from "react-icons/ai";
+// import Image from "next/image";
+// import Countdown from "react-countdown";
 
 //INTERNAL IMPORT
 import { VotingContext } from "../context/Voter";
 import Style from "../styles/index.module.css";
 import Card from "../components/card/card";
-import image from "../candidate.png";
-import background from "../blockchain.svg";
+// import image from "../candidate.png";
+// import background from "../blockchain.svg";
 
 const pollingBooth = () => {
   const {
