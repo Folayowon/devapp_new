@@ -75,7 +75,7 @@ export const VotingProvider = ({ children }) => {
 
     if (accounts.length > 0) {
       setCurrentAccount(accounts[0]);
-      getAllVoterData();
+      //getAllVoterData();
       
     } else {
       setError("Please, connect your wallet.");
@@ -221,27 +221,27 @@ export const VotingProvider = ({ children }) => {
     const provider = new ethers.providers.Web3Provider(connection);
     const signer = provider.getSigner();
     const contract = fetchContract(signer);
-     await contract.authorizer();
-    
-    //VOTER LIST
+    await contract.authorizer();
+
+    // VOTER LIST
     const voterListData = await contract.get_voter_list();
-      console.log(voterListData)
-    const newVoterAddress =  setVoterAddress(voterListData);
-      console.log(newVoterAddress)
-      
-      const voterDetails = await Promise.all(voterListData.map(async (el) => {
+    console.log(voterListData)
+    setVoterAddress(voterListData);
+    console.log(voterListData)
+
+    const voterDetails = await Promise.all(voterListData.map(async (el) => {
         const singleVoterData = await contract.getVoterDetails(el);
-        voterListArray.push(singleVoterData)
         return singleVoterData;
     }));
-    // setVoters(voterDetails);
+    setVoterArray(voterDetails);
 
-    //VOTER LENGTH
+    // VOTER LENGTH
     const voterList = await contract.getVotersLength();
     console.log(voterList)
     setVoterLength(voterList.toNumber());
     console.log("voterList", voterList);
 };
+
 
 
 //START ELECTION
