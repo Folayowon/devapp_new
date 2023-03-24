@@ -101,7 +101,7 @@ contract Devapp {
   
     // Constructor : I hardcoded this for the purpose of assessment. I have included a function that can transfer ownership which I will later implement once this has been tested
     constructor() {
-        authorizer = 0x70997970C51812dc3A010C7d01b50e0d17dc79C8; // set the contract authorizer's address as the sender of the constructor transaction
+        authorizer = 0xa1B94ef0f24d7F4fd02285EFcb9202E6C6EC655B; // set the contract authorizer's address as the sender of the constructor transaction
         state = ElectionState.NotStarted;
         
     }
