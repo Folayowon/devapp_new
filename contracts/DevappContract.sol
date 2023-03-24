@@ -278,7 +278,7 @@ contract Devapp {
         ended = block.timestamp;
     }
 
-    function resetElection() public onlyAuthorizer{
+    function resetElection(bool) public onlyAuthorizer{
         require (state == ElectionState.Ended, "Election has not ended.");
         state = ElectionState.NotStarted;
     }

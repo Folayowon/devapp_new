@@ -8,15 +8,18 @@ import { create } from "ipfs-http-client";
 import axios from "axios";
 import { useRouter } from "next/router";
 
+
 //INTERNAL IMPORT
 import { VotingAddress, VotingAddressABI } from "./constants";
 //import ListOfVoters from "../pages/ListOfVoters";
 import Devapp from "./Devapp.json";
 
 
+
 // IPFS credentials
 const projectId = "2Kdq3ptwRNMhda7ZECqgVSl3yBe";
 const projectSecretKey = "612c7614ea7760dfd3a4470623b353ef";
+
 const auth = `Basic ${Buffer.from(`${projectId}:${projectSecretKey}`).toString(
   "base64"
 )}`;

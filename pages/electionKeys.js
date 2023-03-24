@@ -11,7 +11,7 @@ const electionKeys = () => {
 
 
     
-  const {startElection, CountdownTimer, endElection} = useContext(VotingContext);
+  const {startElection, CountdownTimer, endElection, resetElection} = useContext(VotingContext);
    
 
     return (
@@ -35,7 +35,7 @@ const electionKeys = () => {
           <div className={Style.Button}>
             <Button
             btnName="reset Election"
-            handleClick={() => resetElection(true)}
+            handleClick={() => resetElection()}
             />
           </div>
       </div>
