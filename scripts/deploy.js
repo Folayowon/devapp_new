@@ -1,4 +1,7 @@
+const { ethers } = require("ethers");
+
 const hre = require("hardhat");
+
 
 async function main() {
   const Devapp = await hre.ethers.getContractFactory("Devapp");
