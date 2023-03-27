@@ -21,6 +21,7 @@ contract Devapp {
     ElectionState public state = ElectionState.NotStarted;
 
     event Action(uint256 timestamp);
+    event AdminChanged(address newAdmin);
     // Structs
     struct Candidate {
         uint256 id; // unique identifier for candidate
@@ -86,14 +87,14 @@ contract Devapp {
     }
 
 
-    // modifier ownable() {
-    //     require(authorizer == msg.sender, "You are not allowed to perform this operation");
-    //     _;
-    //     }
+    modifier ownable() {
+        require(authorizer == msg.sender, "You are not allowed to perform this operation");
+        _;
+        }
 
     
     modifier publicTimeConstraint(){
-        require(state == ElectionState.NotStarted, "Election has already started."); //restrict function accessible only if the election has not yet started
+        require(state == ElectionState.Started, "Election has not started."); //restrict function accessible only if the election has not yet started
         require(state != ElectionState.Ended, "Election has already ended" );// restrict function accessible only if the election has not yet started and ended.
         _;// execute the function
     }
@@ -101,22 +102,21 @@ contract Devapp {
   
     // Constructor : I hardcoded this for the purpose of assessment. I have included a function that can transfer ownership which I will later implement once this has been tested
     constructor() {
-        authorizer = 0xa1B94ef0f24d7F4fd02285EFcb9202E6C6EC655B; // set the contract authorizer's address as the sender of the constructor transaction
+        authorizer = msg.sender; // set the contract authorizer's address as the sender of the constructor transaction
         state = ElectionState.NotStarted;
         
     }
 
     
-    function getAdmin() public view returns (address) {
-    // Only the owner of the contract is an admin
-    return authorizer;
-}
+   function transferOwnership(address newAddress) public ownable {
+        require(newAddress != address(0), "Invalid Address");
+        authorizer = newAddress;
+        emit AdminChanged(newAddress);
+    }
 
-// function transferOwnership(address newAddress) public ownable {
-//         require(newAddress != address(0), "Invalid Address");
-//         authorizer = newAddress;
-//     }
-
+    function useAdminAddress() public view returns (bool) {
+        return (msg.sender == authorizer);
+    }
 
     function createCandidate(
         address _addr,
@@ -223,13 +223,13 @@ contract Devapp {
     }
 
     function voteBooth(address _candidateAddr, uint256 _candidateUniqueId) external publicTimeConstraint{
-        Voter storage voter = voters[0xa1B94ef0f24d7F4fd02285EFcb9202E6C6EC655B];
+        Voter storage voter = voters[msg.sender];
         require(!voter.voted, "You can't vote twice." );
         require(voter.voteCredits != 0, "Your account isn't registered or authorized." );
         
         voter.voted = true;
         voter.voteIndex = _candidateUniqueId;
-        voterAddresses.push(0xa1B94ef0f24d7F4fd02285EFcb9202E6C6EC655B);
+        voterAddresses.push(msg.sender);
         candidates[_candidateAddr].voteCount += voter.voteCredits;
 
         }
@@ -282,6 +282,62 @@ contract Devapp {
         require (state == ElectionState.Ended, "Election has not ended.");
         state = ElectionState.NotStarted;
     }
+
+    function fetchLeadingCandidate() public view returns (
+        uint256 id,
+        string memory name,
+        string memory ipfs
+        ) {
+        require(state == ElectionState.Started, "Election has not started or has ended.");
+
+        uint256 leadingVoteCount;
+        address leadingCandidateAddress;
+
+        for (uint i = 0; i < candidateAddresses.length; i++) {
+            Candidate memory candidate = candidates[candidateAddresses[i]];
+            if (candidate.voteCount > leadingVoteCount) {
+                leadingVoteCount = candidate.voteCount;
+                leadingCandidateAddress = candidate.addr;
+            }
+        }
+
+        Candidate memory leadingCandidate = candidates[leadingCandidateAddress];
+
+        return (
+            leadingCandidate.id,
+            leadingCandidate.name,
+            leadingCandidate.ipfs
+        );
+    }
+
+    function fetchWinner() public view returns (
+        uint256 id,
+        string memory name,
+        string memory ipfs
+        ) {
+        require(state == ElectionState.Ended, "Please, wait till the end of the election");
+
+        uint256 leadingVoteCount;
+        address leadingCandidateAddress;
+
+        for (uint i = 0; i < candidateAddresses.length; i++) {
+            Candidate memory candidate = candidates[candidateAddresses[i]];
+            if (candidate.voteCount > leadingVoteCount) {
+                leadingVoteCount = candidate.voteCount;
+                leadingCandidateAddress = candidate.addr;
+            }
+        }
+
+        Candidate memory leadingCandidate = candidates[leadingCandidateAddress];
+
+        return (
+            leadingCandidate.id,
+            leadingCandidate.name,
+            leadingCandidate.ipfs
+        );
+    }
+
+
        
     }
 

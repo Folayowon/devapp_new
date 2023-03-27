@@ -157,6 +157,61 @@ export const VotingProvider = ({ children }) => {
   };
   
 
+  
+  const useAdminAddress = (currentAccount) => {
+    const [isAdmin, setIsAdmin] = useState(false);
+  
+    const fetchIsAdmin = async () => {
+      try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const contract = fetchContract(signer);
+        const account = await provider.listAccounts();
+        const currentAccount = account[0];
+  
+        const isAuthorized = await contract.useAdminAddress();
+        setIsAdmin(isAuthorized && currentAccount !== null);
+      } catch (error) {
+        console.log("Error checking if user is admin:", error);
+        setIsAdmin(false);
+      }
+    };
+  
+    useEffect(() => {
+      if (currentAccount) {
+        fetchIsAdmin();
+      } else {
+        setIsAdmin(false);
+      }
+    }, [currentAccount]);
+  
+    return isAdmin;
+  };
+  
+  
+
+  const transferOwnership = async (address) => {
+    if(!address) return alert("Input data missing");
+    
+    try {
+      const web3Modal = new Web3Modal();
+      const connection = await web3Modal.connect();
+      const provider = new ethers.providers.Web3Provider(connection);
+      const signer = provider.getSigner();
+      const contract = await fetchContract(signer);
+  
+      await contract.transferOwnership(address);
+      console.log(`Ownership transferred to ${address}`);
+    } catch (error) {
+      console.error(error);
+      throw new Error(`Failed to transfer ownership: ${error.message}`);
+    }
+  };
+  
+    
+  
+
+
   //Function to check if Admin
   const checkIfAdmin = async() => {
     
@@ -255,7 +310,7 @@ export const VotingProvider = ({ children }) => {
 const startElection = async (value) => {
   try {
    
-    const web3Modal = new Web3Modal(); // Create Web3Modal instance
+const web3Modal = new Web3Modal(); // Create Web3Modal instance
 const connection = await web3Modal.connect(); // Connect to Web3Modal
 const provider = new ethers.providers.Web3Provider(connection); // Create Web3Provider instance
 const signer = provider.getSigner(); // Get signer
@@ -277,7 +332,7 @@ console.log(contract) // Log contract instance to console
 const endElection = async (value) => {
   try {
    
-    const web3Modal = new Web3Modal(); // Create Web3Modal instance
+const web3Modal = new Web3Modal(); // Create Web3Modal instance
 const connection = await web3Modal.connect(); // Connect to Web3Modal
 const provider = new ethers.providers.Web3Provider(connection); // Create Web3Provider instance
 const signer = provider.getSigner(); // Get signer
@@ -297,7 +352,7 @@ console.log(contract) // Log contract instance to console
 const resetElection = async (value) => {
   try {
    
-    const web3Modal = new Web3Modal(); // Create Web3Modal instance
+const web3Modal = new Web3Modal(); // Create Web3Modal instance
 const connection = await web3Modal.connect(); // Connect to Web3Modal
 const provider = new ethers.providers.Web3Provider(connection); // Create Web3Provider instance
 const signer = provider.getSigner(); // Get signer
@@ -310,6 +365,46 @@ console.log(contract) // Log contract instance to console
   } catch (error) {
     alert(error.message)
     // setError("Ops! You can't vote twice. Reload Browser");
+  }
+};
+
+
+const fetchLeadingCandidate = async () => {
+  try {
+    const web3Modal = new Web3Modal(); // Create Web3Modal instance
+    const connection = await web3Modal.connect(); // Connect to Web3Modal
+    const provider = new ethers.providers.Web3Provider(connection); // Create Web3Provider instance
+    const signer = provider.getSigner(); // Get signer
+    const contract = fetchContract(signer); // Fetch contract instance
+    const leadingCandidate = await contract.fetchLeadingCandidate();
+    
+    return {
+      id: leadingCandidate[0].toString(),
+      name: leadingCandidate[1],
+      ipfs: leadingCandidate[2]
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const fetchWinner = async () => {
+  try {
+    const web3Modal = new Web3Modal(); // Create Web3Modal instance
+    const connection = await web3Modal.connect(); // Connect to Web3Modal
+    const provider = new ethers.providers.Web3Provider(connection); // Create Web3Provider instance
+    const signer = provider.getSigner(); // Get signer
+    const contract = fetchContract(signer); // Fetch contract instance
+    const winner = await contract.fetchWinner();
+    console.log("winner: ", winner)
+    return {
+      id: winner[0].toString(),
+      name: winner[1],
+      ipfs: winner[2]
+    };
+  } catch (error) {
+    console.log(error);
+    return null;
   }
 };
 
@@ -374,26 +469,37 @@ console.log(contract) // Log contract instance to console
     const provider = new ethers.providers.Web3Provider(connection);
     const signer = provider.getSigner();
     const contract = fetchContract(signer);
-    // console.log(contract);
-
+  
     //---------ALL CANDIDATE
     const allCandidate = await contract.getCandidateAddress();
     console.log(contract.getCandidateAddress);
- 
+  
     //--------CANDIDATE DATA
-    allCandidate.map(async (el) => {
+    const promises = allCandidate.map(async (el) => {
       const singleCandidateData = await contract.getCandidateData(el);
       console.log(singleCandidateData)
-      pushCandidate.push(singleCandidateData);
-      candidateIndex.push(singleCandidateData[2].toNumber());
+      return singleCandidateData;
     });
-
+    const candidateData = await Promise.all(promises);
+  
+    // check for duplicates before adding to pushCandidate array
+    candidateData.forEach((data) => {
+      const index = data[2].toNumber();
+      if (!candidateIndex.includes(index)) {
+        pushCandidate.push(data);
+        candidateIndex.push(index);
+      }
+    });
+  
     //---------CANDIDATE LENGTH
     const allCandidateLength = await contract.getCandidateAddressesLength();
     setCandidateLength(allCandidateLength.toNumber());
     console.log(allCandidateLength)
   };
+  
+  
 
+  
   console.log(error.message);
 
   return (
@@ -402,6 +508,8 @@ console.log(contract) // Log contract instance to console
         currentAccount,
         connectWallet,
         fetchAuthorizerAddress,
+        transferOwnership,
+        useAdminAddress,
         uploadToIPFS,
         checkIfAdmin,
         startElection,
@@ -409,6 +517,8 @@ console.log(contract) // Log contract instance to console
         resetElection,
         createVoter,
         setCandidate,
+        fetchLeadingCandidate,
+        fetchWinner,
         getNewCandidate,
         giveVote,
         pushCandidate,

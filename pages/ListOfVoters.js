@@ -4,10 +4,11 @@ import Style from "../styles/voterList.module.css";
 import { VotingContext } from "../context/Voter";
 
 const ListOfVoters = () => {
-  const { getAllVoterData, voterArray } = useContext(VotingContext);
+  const { getAllVoterData, connectWallet, voterArray } = useContext(VotingContext);
 
   useEffect(() => {
     getAllVoterData();
+    connectWallet();
     // console.log(voterArray)
     
   }, []);

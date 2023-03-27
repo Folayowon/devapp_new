@@ -1,25 +1,23 @@
-import React, { useState, useContext, useEffect } from "react";
-import { useRouter } from 'next/router';
+import React, { useState, useContext } from "react";
+import { useRouter } from "next/router";
 import Image from "next/image";
 import Link from "next/link";
 import { AiFillLock, AiFillUnlock } from "react-icons/ai";
-//INTERNAL IMPORT/
-import { VotingContext } from "../../context/Voter";
 import Style from "./NavBar.module.css";
-// import loding from "../../loding.gif";
 import logo from "../../Log.svg";
+import { VotingContext } from "../../context/Voter";
 
 const NavBar = () => {
-  const { connectWallet, error, currentAccount, fetchAuthorizerAddress } = useContext(VotingContext);
+  const {
+    connectWallet,
+    error,
+    currentAccount,
+    fetchAuthorizerAddress,
+    useAdminAddress,
+  } = useContext(VotingContext);
   const [openNav, setOpenNav] = useState(true);
-  const [authorizerAccount, setAthorizerAccount] = useState("")
   const [connected, setConnected] = useState(false);
-
-  useEffect(() => {
-    if (currentAccount) {
-      setConnected(true);
-    }
-  }, [currentAccount]);
+  const isAdmin = useAdminAddress(currentAccount);
 
   return (
     <div className={Style.navbar}>
@@ -39,34 +37,37 @@ const NavBar = () => {
             <Image src={logo} alt="logo" width={100} height={100} />
           </Link>
         </div>
-        {/* /NAV SECTION */}
+
         <div className={Style.nav_flex}>
           {currentAccount && (
-            <div className={[Style.navbar_section]}>
+            <div className={Style.navbar_section}>
               <p>
                 <Link href={{ pathname: "/" }}>Home</Link>
               </p>
+              {currentAccount && isAdmin && (
+                <>
+                  <p>
+                    <Link
+                      className={Style.linkWeight}
+                      href={{ pathname: "./registrationPortal" }}
+                    >
+                      Registration
+                    </Link>
+                  </p>
 
-              <p>
-                <Link className={Style.linkWeight} href={{ pathname: "./registrationPortal" }}>
-                  Registration
-                </Link>
-              </p>
-
-              <p>
-                <Link href={{ pathname: "electionKeys" }}>
-                  Protocols
-                </Link>
-              </p>
-
+                  <p>
+                    <Link href={{ pathname: "electionKeys" }}>Protocols</Link>
+                  </p>
+                </>
+              )}
               <p>
                 <Link href={{ pathname: "ListOfVoters" }}>Voters</Link>
               </p>
-
               <p>
-                <Link href={{ pathname: "pollingBooth" }}>
-                  Polling Booth
-                </Link>
+                <Link href={{ pathname: "pollingBooth" }}>Polling Booth</Link>
+              </p>
+              <p>
+                <Link href={{ pathname: "electionSummary" }}>Election Summary</Link>
               </p>
             </div>
           )}
@@ -95,39 +96,43 @@ const NavBar = () => {
                       <p>
                         <Link href={{ pathname: "/" }}>Home</Link>
                       </p>
-
+                      {currentAccount && isAdmin && (
+                        <>
+                          <p>
+                            <Link
+                              className={Style.linkWeight}
+                              href={{ pathname: "./registrationPortal" }}
+                            >
+                              Registration
+                            </Link>
+                          </p>
+                          <p>
+                            <Link href={{ pathname: "electionKeys" }}>
+                              Protocols
+                            </Link>
+                          </p>
+                        </>
+                      )}
                       <p>
-                        <Link className={Style.linkWeight} href={{ pathname: "./registrationPortal" }}>
-                          Registration
+                        <Link href={{ pathname: "ListOfVoters" }}>Voters</Link>
+                      </p>
+                      <p>
+                        <Link href={{ pathname: "pollingBooth" }}>
+                          Polling Booth
                         </Link>
                       </p>
 
                       <p>
-                        <Link href={{ pathname: "electionKeys" }}>
-                          Protocols
+                        <Link href={{ pathname: "electionSummary" }}>
+                          Election Summary
                         </Link>
                       </p>
-
-                      <p>
-                        <Link href={{ pathname
-
-
-: "ListOfVoters" }}>Voters</Link>
-            </p>
-
-            <p>
-              <Link href={{ pathname: "pollingBooth" }}>
-                Polling Booth
-              </Link>
-            </p>
-          </div>
-        </div>
-      )}
-    </div>
-  ) : (
-    <button onClick={() => connectWallet()}>Connect Wallet</button>
-  )}
-</div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <button onClick={() => connectWallet()}>Connect Wallet</button> )}</div>
         </div>
       </div>
     </div>

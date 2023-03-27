@@ -15,10 +15,12 @@ import voter from "../voter.jpg";
 
 const candidateRegistration = () => {
   const [fileUrl, setFileUrl] = useState(null);
+  const [candidateAdded, setCandidateAdded] = useState(false); // add state for tracking if candidate is added
   const {
     uploadToIPFSCandidate,
     setCandidate,
     getNewCandidate,
+    checkIfWalletIsConnected,
     candidateArray,
   } = useContext(VotingContext);
   const [candidateForm, setCandidateForm] = useState({
@@ -45,6 +47,19 @@ const candidateRegistration = () => {
   useEffect(() => {
     getNewCandidate();
   }, []);
+
+  // use effect to monitor changes to candidateAdded state variable
+  useEffect(() => {
+    if (candidateAdded) {
+      alert("Candidate successfully added!"); // display alert when candidateAdded becomes true
+    }
+  }, [candidateAdded]);
+
+  const handleCandidateAdd = () => {
+    setCandidate(candidateForm, fileUrl, router);
+    setCandidateAdded(true); // set candidateAdded to true when candidate is added
+  };
+
   return (
     <div className={Style.createVoter}>
       <div>
