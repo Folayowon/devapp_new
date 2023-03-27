@@ -5,8 +5,8 @@ import { useContext, useState } from "react";
 
 const ElectionSummary = () => {
   const { fetchWinner, fetchLeadingCandidate } = useContext(VotingContext);
-  const [winner, setWinner] = useState("");
-  const [leadingCandidate, setLeadingCandidate] = useState("");
+  const [winner, setWinner] = useState(null);
+  const [leadingCandidate, setLeadingCandidate] = useState(null);
 
   const handleFetchWinner = async () => {
     try {
@@ -35,6 +35,28 @@ const ElectionSummary = () => {
       <div className={Style.Button}>
         <Button btnName="Click here to see the winner." handleClick={handleFetchWinner} />
       </div>
+
+      {leadingCandidate && (
+  <div>
+    <h3>Leading Candidate</h3>
+    <p>ID: {leadingCandidate.id}</p>
+    <p>Name: {leadingCandidate.name}</p>
+    {leadingCandidate.ipfs && (
+      <img src={`${leadingCandidate.ipfs}`} alt="Leading Candidate" />
+    )}
+  </div>
+)}
+
+{winner && (
+  <div>
+    <h3>Winner</h3>
+    <p>ID: {winner.id}</p>
+    <p>Name: {winner.name}</p>
+    {winner.ipfs && (
+      <img src={`${winner.ipfs}`} alt="Winner" />
+    )}
+  </div>
+)}
     </div>
   );
 };

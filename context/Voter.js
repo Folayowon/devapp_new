@@ -377,14 +377,14 @@ const fetchLeadingCandidate = async () => {
     const signer = provider.getSigner(); // Get signer
     const contract = fetchContract(signer); // Fetch contract instance
     const leadingCandidate = await contract.fetchLeadingCandidate();
-    
+    console.log("winner: ", leadingCandidate)
     return {
       id: leadingCandidate[0].toString(),
       name: leadingCandidate[1],
       ipfs: leadingCandidate[2]
     };
   } catch (error) {
-    console.log(error);
+    alert("Election has not started or ended.");
   }
 };
 
@@ -403,7 +403,7 @@ const fetchWinner = async () => {
       ipfs: winner[2]
     };
   } catch (error) {
-    console.log(error);
+    alert("Please, wait till the end of election.");
     return null;
   }
 };

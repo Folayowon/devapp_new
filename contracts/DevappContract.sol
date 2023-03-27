@@ -119,39 +119,38 @@ contract Devapp {
     }
 
     function createCandidate(
-        address _addr,
-        string memory _name,
-        string memory _age,
-        string memory _image,
-        string memory _ipfs
-    ) public onlyAuthorizerOnTime{
-        require(_addr != address(0), "Candidate address cannot be zero");
-        _candidateId.increment(); // increment the candidate counter
-        uint256 id_number = _candidateId.current(); // get the current value of the candidate counter
+    address _addr,
+    string memory _name,
+    string memory _age,
+    string memory _image,
+    string memory _ipfs
+) public onlyAuthorizerOnTime {
+    require(_addr != address(0), "Candidate address cannot be zero");
+    _candidateId.increment(); // increment the candidate counter
+    uint256 id_number = _candidateId.current(); // get the current value of the candidate counter
 
-        Candidate storage candidate = candidates[_addr]; // create a reference to the candidate with the given address
-        candidate.id = id_number; // set the candidate's id
-        candidate.name = _name;
-        candidate.age = _age;
-        candidate.image = _image;
-        candidate.voteCount = 0;
-        candidate.addr = _addr;
-        candidate.ipfs = _ipfs;
+    Candidate storage candidate = candidates[_addr]; // create a reference to the candidate with the given address
+    candidate.id = id_number; // set the candidate's id
+    candidate.name = _name;
+    candidate.age = _age;
+    candidate.image = _image;
+    candidate.voteCount = 0;
+    candidate.addr = _addr;
+    candidate.ipfs = _ipfs;
 
-        candidateAddresses.push(_addr);
+    candidateAddresses.push(_addr);
 
-        emit CandidateCreated(
-            candidate.id,
-            _name,
-            _age,
-            _image,
-            candidate.voteCount,
-            candidate.addr,
-            candidate.ipfs
-            
-        );
-        
-    }
+    emit CandidateCreated(
+        candidate.id,
+        candidate.name,
+        candidate.age,
+        candidate.image,
+        candidate.voteCount,
+        candidate.addr,
+        candidate.ipfs
+    );
+}
+
     function getCandidateAddress() public view returns(address[] memory) {
     if(candidateAddresses.length == 0) {
         return new address[](0);
