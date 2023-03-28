@@ -190,18 +190,22 @@ export const VotingProvider = ({ children }) => {
   
   
 
-  const transferOwnership = async (address) => {
-    if(!address) return alert(error);
-    
+  const transferOwnership = async (newAddress) => {
     try {
+      if (!newAddress) {
+        throw new Error("Invalid Address");
+      }
+  
       const web3Modal = new Web3Modal();
       const connection = await web3Modal.connect();
       const provider = new ethers.providers.Web3Provider(connection);
       const signer = provider.getSigner();
       const contract = await fetchContract(signer);
   
-      await contract.transferOwnership(address);
-      console.log(`Ownership transferred to ${address}`);
+      const transaction = await contract.transferOwnership(newAddress);
+      await transaction.wait();
+  
+      console.log(`Ownership transferred to ${newAddress}`);
     } catch (error) {
       console.error(error);
       throw new Error(`Failed to transfer ownership: ${error.message}`);
