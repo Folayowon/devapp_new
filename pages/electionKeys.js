@@ -12,9 +12,10 @@ const ElectionKeys = () => {
   };
 
   const handleTransferOwnership = async () => {
+
     try {
       await transferOwnership(newOwner);
-      console.log("Ownership transferred successfully.");
+      alert("Ownership transferred successfully.");
     } catch (error) {
       console.error(error);
     }
