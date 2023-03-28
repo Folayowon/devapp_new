@@ -53,8 +53,8 @@ contract Devapp {
     // Events
     event CandidateCreated(
         uint256 indexed id,
-        string age,
         string name,
+        string age,
         string image,
         uint256 voteCount,
         address addr,

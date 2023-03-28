@@ -7,7 +7,7 @@ const ElectionSummary = () => {
   const { fetchWinner, fetchLeadingCandidate } = useContext(VotingContext);
   const [winner, setWinner] = useState(null);
   const [leadingCandidate, setLeadingCandidate] = useState(null);
-
+  
   const handleFetchWinner = async () => {
     try {
       const result = await fetchWinner();
@@ -26,6 +26,10 @@ const ElectionSummary = () => {
     }
   };
 
+  const handleImgError = (event) => {
+    event.target.style.display = "none";
+  }
+
   return (
     <div>
       <div className={Style.Button}>
@@ -37,26 +41,26 @@ const ElectionSummary = () => {
       </div>
 
       {leadingCandidate && (
-  <div>
-    <h3>Leading Candidate</h3>
-    <p>ID: {leadingCandidate.id}</p>
-    <p>Name: {leadingCandidate.name}</p>
-    {leadingCandidate.ipfs && (
-      <img src={`${leadingCandidate.ipfs}`} alt="Leading Candidate" />
-    )}
-  </div>
-)}
+        <div>
+          <h3>Leading Candidate</h3>
+          <p>ID: {leadingCandidate.id}</p>
+          <p>Name: {leadingCandidate.name}</p>
+          {leadingCandidate.ipfs && (
+            <img src={`${leadingCandidate.ipfs}`} alt="Leading Candidate" onError={handleImgError} />
+          )}
+        </div>
+      )}
 
-{winner && (
-  <div>
-    <h3>Winner</h3>
-    <p>ID: {winner.id}</p>
-    <p>Name: {winner.name}</p>
-    {winner.ipfs && (
-      <img src={`${winner.ipfs}`} alt="Winner" />
-    )}
-  </div>
-)}
+      {winner && (
+        <div>
+          <h3>Winner</h3>
+          <p>ID: {winner.id}</p>
+          <p>Name: {winner.name}</p>
+          {winner.ipfs && (
+            <img src={`${winner.ipfs}`} alt="Winner" onError={handleImgError} />
+          )}
+        </div>
+      )}
     </div>
   );
 };

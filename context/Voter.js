@@ -368,7 +368,6 @@ console.log(contract) // Log contract instance to console
   }
 };
 
-
 const fetchLeadingCandidate = async () => {
   try {
     const web3Modal = new Web3Modal(); // Create Web3Modal instance
@@ -377,7 +376,7 @@ const fetchLeadingCandidate = async () => {
     const signer = provider.getSigner(); // Get signer
     const contract = fetchContract(signer); // Fetch contract instance
     const leadingCandidate = await contract.fetchLeadingCandidate();
-    console.log("winner: ", leadingCandidate)
+    console.log("leading candidate: ", leadingCandidate);
     return {
       id: leadingCandidate[0].toString(),
       name: leadingCandidate[1],
@@ -407,6 +406,7 @@ const fetchWinner = async () => {
     return null;
   }
 };
+
 
 
 
