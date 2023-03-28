@@ -380,12 +380,12 @@ const fetchLeadingCandidate = async () => {
     console.log("The leading: ", leadingCandidate)
     return {
       id: leadingCandidate[0].toString(),
-      name: leadingCandidate[1],
+      age: leadingCandidate[1],
       ipfs: leadingCandidate[2]
     };
     
   } catch (error) {
-    alert("Election has not started or has ended.");
+    alert(error);
     
   }
 };
@@ -401,7 +401,7 @@ const fetchWinner = async () => {
     console.log("winner: ", winner)
     return {
       id: winner[0].toString(),
-      name: winner[1],
+      age: winner[1],
       ipfs: winner[2]
     };
   } catch (error) {
@@ -483,9 +483,11 @@ const fetchWinner = async () => {
       return singleCandidateData;
     });
     const candidateData = await Promise.all(promises);
+    console.log(candidateData)
   
     // check for duplicates before adding to pushCandidate array
     candidateData.forEach((data) => {
+      console.log("data",data)
       const index = data[2].toNumber();
       if (!candidateIndex.includes(index)) {
         pushCandidate.push(data);

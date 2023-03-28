@@ -42,9 +42,9 @@ const ElectionSummary = () => {
 
       {leadingCandidate && (
         <div>
-          <h3>Leading Candidate</h3>
-          <p>ID: {leadingCandidate.id}</p>
-          <p>: {leadingCandidate.name}</p>
+          <h3 className={Style.Button}>Leading Candidate</h3>
+          <p className={Style.Button}>ID: {leadingCandidate.id}</p>
+          <p className={Style.Button}>Age: {leadingCandidate.age}</p>
           {leadingCandidate.ipfs && (
             <img src={`${leadingCandidate.ipfs}`} alt="Leading Candidate" onError={handleImgError} />
           )}
@@ -53,9 +53,9 @@ const ElectionSummary = () => {
 
       {winner && (
         <div>
-          <h3>Winner</h3>
-          <p>ID: {winner.id}</p>
-          <p>Age: {winner.name}</p>
+          <h3 className={Style.Button}>Winner</h3>
+          <p className={Style.Button}>ID: {winner.id}</p>
+          <p className={Style.Button}>Age: {winner.age}</p>
           {winner.ipfs && (
             <img src={`${winner.ipfs}`} alt="Winner" onError={handleImgError} />
           )}

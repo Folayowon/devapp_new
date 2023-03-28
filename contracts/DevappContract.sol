@@ -284,7 +284,7 @@ contract Devapp {
 
     function fetchLeadingCandidate() public view returns (
         uint256 id,
-        string memory name,
+        string memory age,
         string memory ipfs
         ) {
         require(state == ElectionState.Started, "Election has not started or has ended.");
@@ -304,14 +304,14 @@ contract Devapp {
 
         return (
             leadingCandidate.id,
-            leadingCandidate.name,
+            leadingCandidate.age,
             leadingCandidate.ipfs
         );
     }
 
     function fetchWinner() public view returns (
         uint256 id,
-        string memory name,
+        string memory age,
         string memory ipfs
         ) {
         require(state == ElectionState.Ended, "Please, wait till the end of the election");
@@ -331,7 +331,7 @@ contract Devapp {
 
         return (
             leadingCandidate.id,
-            leadingCandidate.name,
+            leadingCandidate.age,
             leadingCandidate.ipfs
         );
     }
