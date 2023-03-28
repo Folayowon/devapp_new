@@ -321,7 +321,7 @@ console.log(contract) // Log contract instance to console
 
     console.log(electionStatus);
   } catch (error) {
-    alert(error.message)
+    alert("Election has already started!")
     // setError("Ops! You can't vote twice. Reload Browser");
   }
 };
@@ -421,9 +421,9 @@ const fetchWinner = async () => {
       const provider = new ethers.providers.Web3Provider(connection);
       const signer = provider.getSigner();
       const contract = fetchContract(signer);
-
       const voteredList = await contract.voteBooth(voterAddress, voterId);
       console.log(voteredList);
+      alert("Your vote has been successfully casted!");
     } catch (error) {
       alert(error.message);
     }

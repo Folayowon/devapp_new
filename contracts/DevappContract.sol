@@ -25,8 +25,8 @@ contract Devapp {
     // Structs
     struct Candidate {
         uint256 id; // unique identifier for candidate
-        string age; // age of candidate
         string name; // name of candidate
+        string age; // age of candidate
         string image; // IPFS hash of candidate's image
         uint256 voteCount; // number of votes received by the candidate
         address addr; // address of the candidate
