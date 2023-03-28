@@ -25,8 +25,8 @@ contract Devapp {
     // Structs
     struct Candidate {
         uint256 id; // unique identifier for candidate
-        string name; // name of candidate
         string age; // age of candidate
+        string name; // name of candidate
         string image; // IPFS hash of candidate's image
         uint256 voteCount; // number of votes received by the candidate
         address addr; // address of the candidate
@@ -53,8 +53,8 @@ contract Devapp {
     // Events
     event CandidateCreated(
         uint256 indexed id,
-        string name,
         string age,
+        string name,
         string image,
         uint256 voteCount,
         address addr,

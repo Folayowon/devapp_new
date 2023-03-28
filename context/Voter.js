@@ -321,7 +321,7 @@ console.log(contract) // Log contract instance to console
 
     console.log(electionStatus);
   } catch (error) {
-    alert("Election has already started!")
+    alert("Election has already started")
     // setError("Ops! You can't vote twice. Reload Browser");
   }
 };
@@ -368,6 +368,7 @@ console.log(contract) // Log contract instance to console
   }
 };
 
+
 const fetchLeadingCandidate = async () => {
   try {
     const web3Modal = new Web3Modal(); // Create Web3Modal instance
@@ -376,14 +377,16 @@ const fetchLeadingCandidate = async () => {
     const signer = provider.getSigner(); // Get signer
     const contract = fetchContract(signer); // Fetch contract instance
     const leadingCandidate = await contract.fetchLeadingCandidate();
-    console.log("leading candidate: ", leadingCandidate);
+    console.log("The leading: ", leadingCandidate)
     return {
       id: leadingCandidate[0].toString(),
       name: leadingCandidate[1],
       ipfs: leadingCandidate[2]
     };
+    
   } catch (error) {
-    alert("Election has not started or ended.");
+    alert("Election has not started or has ended.");
+    
   }
 };
 
@@ -406,7 +409,6 @@ const fetchWinner = async () => {
     return null;
   }
 };
-
 
 
 
