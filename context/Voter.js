@@ -191,7 +191,7 @@ export const VotingProvider = ({ children }) => {
   
 
   const transferOwnership = async (address) => {
-    if(!address) return alert("Input data missing");
+    if(!address) return alert(error);
     
     try {
       const web3Modal = new Web3Modal();
